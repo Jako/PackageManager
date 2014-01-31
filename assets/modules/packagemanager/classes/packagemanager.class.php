@@ -100,7 +100,7 @@ class PackageManager {
 		$this->options['assetsPath'] = MODX_BASE_PATH . 'assets/';
 
 		if (!file_exists($this->options['cachePath'])) {
-			mkdir($this->options['cachePath'], intval($this->modx->config['new_folder_permissions']), 8);
+			mkdir($this->options['cachePath'], intval($this->modx->config['new_folder_permissions'], 8));
 		}
 
 		if (!class_exists('newChunkie')) {
@@ -326,7 +326,7 @@ class PackageManager {
 		$extractFolder = $fileinfo['dirname'] . '/' . $fileinfo['filename'];
 		$error = '';
 		if (!file_exists($extractFolder)) {
-			mkdir($extractFolder, intval($this->modx->config['new_folder_permissions'], 8);
+			mkdir($extractFolder, intval($this->modx->config['new_folder_permissions'], 8));
 			$zip = new ZipArchive;
 			$res = $zip->open($filename);
 			if ($res === TRUE) {
