@@ -12,7 +12,8 @@ Installation
 --------------------------------------------------------------------------------
 1. Upload the folder *assets/modules/packagemanager* to the corresponding folder in your installation
 2. Create a new Module called Package Manager and fill the Module code with `include_once(MODX_BASE_PATH . 'assets/modules/packagemanager/packagemanager.module.php');`
-3. Reload the Manager (or just the top frame of the Manager) and open the Package Manager Module.
+3. Create the folder *assets/packages* and make it writable for PHP.
+4. Reload the Manager (or just the top frame of the Manager) and open the Package Manager Module.
 
 Notes
 --------------------------------------------------------------------------------
