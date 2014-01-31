@@ -402,7 +402,7 @@ class PackageManager {
 			$wrapper = $this->language['no_local_packages'];
 		}
 
-		$this->chunkie->setPlaceholder('name', 'Packages');
+		$this->chunkie->setPlaceholder('name', $this->language['packages']);
 		$this->chunkie->setPlaceholder('type', '');
 		$this->chunkie->setPlaceholder('messages', implode("<br/>\n", $messages));
 		$this->chunkie->setPlaceholder('lang', $this->language);
