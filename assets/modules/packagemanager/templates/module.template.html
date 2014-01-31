@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>[+lang.modulename+]</title>
+        <link rel="stylesheet" type="text/css" href="media/style/[+options.managerTheme+]/style.css" />
+        <link rel="stylesheet" type="text/css" href="../[+options.moduleDir+]templates/packagemanager.css" />
+        <script type="text/javascript">
+			var moduleId = '[+options.moduleId+]';
+        </script>
+    </head>
+    <body>
+        <h1>[+lang.modulename+]</h1>
+        <div id="actions">
+            <ul class="actionButtons">
+                <li id="Button1"><a href="index.php?a=112&amp;id=[+options.moduleId+]"><img src="media/style/[+options.managerTheme+]/images/icons/refresh.png" alt="Neu laden" /> [+lang.reload+]</a></li>
+                <li id="Button2"><a href="index.php?a=106"><img src="media/style/[+options.managerTheme+]/images/icons/stop.png" alt="[+lang.close+] [+lang.modulename+]" /> [+lang.close+] [+lang.modulename+]</a></li>
+            </ul>
+        </div>
+		<div class="sectionBody">
+			<div class="dynamic-tab-pane-control tab-pane" id="packageManagerPanes">
+				<div class='tab-row'>
+					<h2 id="tabs-packages" class='tab'><a href="#tabpanel-packages"><span>[+lang.packages+]</span></a></h2>
+					<h2 id="tabs-local" class='tab'><a href="#tabpanel-local"><span>[+lang.local+]</span></a></h2>
+				</div>
+				<div class="tab-page panel-container">
+					<div id="tabpanel-packages">
+						<h2>[+lang.packages+]</h2>
+						[+lang.packages_intro+]
+						<div id="packagesInstalled">
+							[+packagesInstalled+]
+						</div>
+					</div>
+					<div id="tabpanel-local">
+						<h2>[+lang.local+]</h2>
+						[+lang.local_intro+]
+						<div id="packagesLocal">
+							[+packagesLocal+]
+						</div>
+						<div id="uploadLocal">
+							[+uploadLocal+]
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery.easytabs.min.js"></script>
+        <script type="text/javascript" src="../[+options.moduleDir+]js/packagemanager.js"></script>
+    </body>
+</html>

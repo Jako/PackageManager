@@ -1,0 +1,15 @@
+<div class="packages [+type+]">
+	<div class="sectionHeader">[+name+]</div>
+	<div class="sectionBody">
+		<div class="filter">
+			<div id="searchPagination">[+pagination+]</div>
+			<form id="searchPackages" method="post" action="index.php?a=112&id=[+options.moduleId+]">
+				<input type="hidden" name="page" value="[+page+]" >
+				<input type="text" name="search" class="searchtext" value="[+search+]">
+				<input type="submit" name="submit_search" value="[+lang.search_search+]"/>
+				<input type="submit" name="submit_reset" value="[+lang.search_reset+]"/>
+			</form>
+		</div>
+		[+wrapper+]
+	</div>
+</div>

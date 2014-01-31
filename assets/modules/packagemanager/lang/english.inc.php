@@ -1,0 +1,64 @@
+<?php
+/*
+ * Package Manager
+ *
+ * @package packagemanager
+ * @subpackage language_file
+ *
+ * @version 0.9
+ * @author Thomas Jakobi <thomas.jakobi@partout.info>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+$_lang['modulename'] = 'Package Manager';
+$_lang['packages'] = 'Packages';
+$_lang['package'] = 'Package';
+$_lang['packages_intro'] = '<p>Installed packages on this installation.</p>';
+$_lang['local'] = 'Local';
+$_lang['local_intro'] = '<p>Installable local packages on this installation. New packages could be uploaded below.</p>
+<p>You could install each package by clicking on the install button. If you delete a package on this page, only the installable package will be removed and not the installed package in the system.</p>
+<p>If you want, you could upload MODX installer compatible package files directly in the assets/packages folder. These are recognized by the Package Manager.</p>';
+$_lang['reload'] = 'Reload';
+$_lang['close'] = 'Close';
+$_lang['no_local_packages'] = 'No installable local packages found.';
+$_lang['snippets'] = 'Snippets';
+$_lang['plugins'] = 'Plugins';
+$_lang['modules'] = 'Modules';
+$_lang['templates'] = 'Templates';
+$_lang['tmplvars'] = 'Template Variables';
+$_lang['author'] = 'Autor';
+$_lang['install'] = 'Install';
+$_lang['delete'] = 'Delete';
+$_lang['upload'] = 'Upload';
+$_lang['search_search'] = 'Search';
+$_lang['search_reset'] = 'Reset';
+$_lang['temporary_files'] = 'Temporary files';
+$_lang['snippets_singular'] = 'Snippet';
+$_lang['plugins_singular'] = 'Plugin';
+$_lang['modules_singular'] = 'Module';
+$_lang['templates_singular'] = 'Template';
+$_lang['tmplvars_singular'] = 'Template Variable';
+$_lang['temporary_files_singular'] = 'Temporary file';
+$_lang['installed_version'] = 'Installed version';
+$_lang['installable_version'] = 'Installable version';
+$_lang['install_backup'] = 'Backup old version';
+$_lang['install_replace'] = 'Replace old version';
+$_lang['install_results'] = 'Installation Results';
+$_lang['install_update_success'] = '[+type+] [+name+] successful updated.';
+$_lang['install_update_error'] = '[+type+] [+name+] could not be updated: [+error+]';
+$_lang['install_add_success'] = '[+type+] [+name+] successful added.';
+$_lang['install_add_error'] = '[+type+] [+name+] could not be added: [+error+]';
+$_lang['install_legacy'] = 'Legacy plugins [+legacies+] disabled';
+$_lang['install_files_success'] = 'Package files saved in [+folder+]';
+$_lang['install_files_success_backup'] = 'Backup of package files saved in [+folder+]';
+$_lang['install_depedency_created'] = '[+modulename+] Module: Depedency created';
+$_lang['install_depedency_updated'] = '[+modulename+] Module: Depedency updated';
+$_lang['install_depedency_guid_set'] = '[+type+] [+depedencyname+]: GUID set';
+$_lang['file_delete_success'] = 'Package successful deleted.';
+$_lang['file_upload_success'] = '[+filename+] successful uploaded.';
+$_lang['file_upload_error'] = '[+filename+] was not uploaded. Is the folder assets/packages writable?';
+$_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] already exists';
+$_lang['file_upload_error_package'] = '[+filename+] is not a valid MODX Evolution package.';
+$_lang['file_upload_error_type'] = '[+filename+] has the wrong file type.';
+$_lang['file_extract_error'] = '[+filename+] could not be extracted. Is the folder assets/packages writable?';
+$_lang['file_extract_error_open'] = '[+filename+] could not be opened as zip file';
+?>

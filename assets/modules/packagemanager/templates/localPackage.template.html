@@ -1,0 +1,22 @@
+<div class="package">
+	<div class="name">
+		<h3>[+name+]</h3>
+		<span class="type"> ([+type+])</span>
+		<form class="installPackage" method="post" action="index.php?a=112&id=[+options.moduleId+]">
+			<input type="hidden" name="package" value="[+package+]">
+			<div class="group">
+				<input type="submit" name="submit_install" value="[+lang.install+]"/>
+				<input type="submit" name="submit_delete" value="[+lang.delete+]"/>
+			</div>
+			<div class="group">
+				<input type="radio" name="updatemode" value="backup" checked="checked"/> [+lang.install_backup+]<br/>
+				<input type="radio" name="updatemode" value="merge"/> [+lang.install_replace+]
+			</div>
+		</form>
+	</div>
+	<div class="properties">
+		<div class="description">[+description+]</div>
+		<div class="author"><span class="label">[+lang.author+]:</span> <span class="value">[+author+]</span></div>
+		<div class="version"><span class="label">[+lang.installable_version+]:</span> <span class="value">[+version+]</span></div>
+	</div>
+</div>
