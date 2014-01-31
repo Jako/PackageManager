@@ -6,7 +6,7 @@ for the MODX Evolution content management framework
 
 Features
 --------------------------------------------------------------------------------
-With this Module you could easy install extra packages in MODX Evolution. Just download the extra package zip file, upload it in the Package Manager Module and install it. All Snippets, Plugins and Modules are created with no hazzle.
+With this Module you could easy install extra packages in MODX Evolution. Just download the extra package zip file (see note 1), upload it (see note 2) in the Package Manager Module and install it. All Snippets, Plugins and Modules are created with no hazzle.
 
 Installation
 --------------------------------------------------------------------------------
@@ -15,8 +15,51 @@ Installation
 3. Create the folder *assets/packages* and make it writable for PHP.
 4. Reload the Manager (or just the top frame of the Manager) and open the Package Manager Module.
 
+MODX Evolution Packages
+--------------------------------------------------------------------------------
+The format requirements for these files are quite simple (since they do not provide any uninstall features like Revolution Transport Packages);
+
+- They could contain an assets folder that contents will be copied to the MODX assets folder. If you use the backup option, the old files are saved in a `.old` folder. 
+- They should contain an install folder with type based subfolders (templates, tvs, chunks, modules, snippets, plugins). In those subfolders for each installed template, template variable, chunk, module, snippet and plugin a .tpl file has to be created. This file starts with a DocBlock (templates, template variables and chunks too) and the code.
+
+The DocBlock starts with the name of the installed extra. The extra description starts after an empty next line. The relevant installation informations should be inserted as docblock tag. The following tags are recognized:
+
+Tag | Description
+--- | -----------
+@version | Version
+@author  | Author
+@internal @modx_category | Category
+@internal @caption | Caption (for Template Variables)
+@internal @input_type | Input Type (for Template Variables)
+@internal @input_options | Input Option Values (for Template Variables)
+@internal @input_default | Default Value (for Template Variables)
+@internal @output_widget | Widget (for Template Variables)
+@internal @output_widget_params | Widget Properties (for Template Variables)
+@internal @guid | GUID (for Modules with enabled parameter sharing)
+@internal @enable_sharedparams | Enable parameter sharing (for Modules)
+@internal @properties | Module/Plugin configuration (for Plugins and Modules)
+@internal @disabled | Plugin Disabled (for Plugins)
+@internal @installset | Install Set (for the MODX Evolution installer)
+
+As an example follows the Package Manager Module .tpl DocBlock:
+
+```
+/**
+ * Package Manager
+ *
+ * Easy install extra packages
+ *
+ * @category 	module
+ * @version 	0.9
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
+ * @author      Jako
+ * @internal	@modx_category Manager and Admin
+ * @internal    @installset base, sample
+ */
+```
+
 Notes
 --------------------------------------------------------------------------------
-1. If you want, you could upload MODX installer compatible package files directly in the assets/packages folder. These are recognized by the Package Manager.
-
+1. The extra packages have to use the MODX Evolution Package format.
+2. If you want, you could upload multiple MODX Evolution Package files directly in the assets/packages folder. These are recognized by the Package Manager.
 

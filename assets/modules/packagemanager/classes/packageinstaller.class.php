@@ -249,7 +249,7 @@ class PackageInstaller {
 					'category' => $this->getCategoryId($docblock['modx_category']),
 					'plugincode' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
 					'properties' => $docblock['properties'],
-					'disabled' => 0
+					'disabled' => (isset($docblock['disabled']) && $docblock['disabled']) ? 1 : 0
 				);
 				$result[] = $this->installType('plugins', $fields, $docblock['version'], $backup);
 
