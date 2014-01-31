@@ -20,11 +20,11 @@ Example Images
 
 Install/Upload packages:
 
-![Eventlist example](https://github.com/Jako/PackageManager/master/packagemanager.install.jpg)
+![Eventlist example](https://raw.github.com/Jako/PackageManager/master/packagemanager.install.jpg)
 
 Manage packages:
 
-![Images example](https://github.com/Jako/PackageManager/master/packagemanager.manage.jpg)
+![Images example](https://raw.github.com/Jako/PackageManager/master/packagemanager.manage.jpg)
 
 MODX Evolution Packages
 --------------------------------------------------------------------------------
