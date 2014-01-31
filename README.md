@@ -15,6 +15,17 @@ Installation
 3. Create the folder *assets/packages* and make it writable for PHP.
 4. Reload the Manager (or just the top frame of the Manager) and open the Package Manager Module.
 
+Example Images
+--------------
+
+Install/Upload packages:
+
+![Eventlist example](https://github.com/Jako/PackageManager/master/packagemanager.install.jpg)
+
+Manage packages:
+
+![Images example](https://github.com/Jako/PackageManager/master/packagemanager.manage.jpg)
+
 MODX Evolution Packages
 --------------------------------------------------------------------------------
 The format requirements for these files are quite simple (since they do not provide any uninstall features like Revolution Transport Packages);

@@ -96,6 +96,7 @@
 	text-decoration: none;
 	display: inline-block;
 	vertical-align: bottom;
+	color: #333;
 }
 
 .packages .package .type {
