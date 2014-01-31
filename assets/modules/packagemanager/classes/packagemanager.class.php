@@ -290,10 +290,10 @@ class PackageManager {
 			$messages[] = $result;
 		};
 		if ($result = $this->unzipLocalPackages()) {
-			$messages[] = array_merge($messages, $result);
+			$messages = array_merge($messages, $result);
 		};
 		if ($result = $this->installLocalPackage()) {
-			$messages[] = array_merge($messages, $result);
+			$messages = array_merge($messages, $result);
 		};
 		$packages = $this->getLocalPackagesInfo();
 		return $this->displayLocalPackages($packages, $messages);
