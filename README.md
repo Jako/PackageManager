@@ -20,9 +20,9 @@ MODX Evolution Packages
 The format requirements for these files are quite simple (since they do not provide any uninstall features like Revolution Transport Packages);
 
 - They could contain an assets folder that contents will be copied to the MODX assets folder. If you use the backup option, the old files are saved in a `.old` folder. 
-- They should contain an install folder with type based subfolders (templates, tvs, chunks, modules, snippets, plugins). In those subfolders for each installed template, template variable, chunk, module, snippet and plugin a .tpl file has to be created. This file starts with a DocBlock (templates, template variables and chunks too) and the code.
+- They should contain an install folder with type based subfolders (templates, tvs, chunks, modules, snippets, plugins). In those subfolders a .tpl file has to be created for each installed template, template variable, chunk, module, snippet and plugin. This file starts with a DocBlock (templates, template variables and chunks too) and the code.
 
-The DocBlock starts with the name of the installed extra. The extra description starts after an empty next line. The relevant installation informations should be inserted as docblock tag. The following tags are recognized:
+The DocBlock starts with the name of the installed extra. The extra description starts after an empty line. The relevant installation informations should be inserted as DocBlock tag. The following tags are recognized by Package Manager:
 
 Tag | Description
 --- | -----------
