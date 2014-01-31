@@ -584,12 +584,12 @@ class PackageInstaller {
 	private function copyFolder($source, $destination) {
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
 		if (!file_exists($destination)) {
-			mkdir($destination, $this->modx->config['new_folder_permissions']);
+			mkdir($destination, intval($this->modx->config['new_folder_permissions']), 8);
 		}
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
 				if (!file_exists($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) {
-					mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), $this->modx->config['new_folder_permissions']);
+					mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), intval($this->modx->config['new_folder_permissions']), 8);
 				}
 			} else {
 				copy($item, $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
