@@ -3,9 +3,12 @@
     <head>
         <title>[+lang.modulename+]</title>
         <link rel="stylesheet" type="text/css" href="media/style/[+options.managerTheme+]/style.css" />
-        <link rel="stylesheet" type="text/css" href="../[+options.moduleDir+]templates/packagemanager.css" />
+        <link rel="stylesheet" type="text/css" href="../[+options.moduleUrl+]templates/packagemanager.css" />
         <script type="text/javascript">
 			var moduleId = '[+options.moduleId+]';
+			var moduleLanguage = {
+				confirm_delete_extra: '[+lang.confirm_delete_extra+]'
+			}
         </script>
     </head>
     <body>
@@ -43,9 +46,9 @@
 				</div>
 			</div>
 		</div>
-        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="../[+options.moduleDir+]js/jquery.easytabs.min.js"></script>
-        <script type="text/javascript" src="../[+options.moduleDir+]js/packagemanager.js"></script>
+        <script type="text/javascript" src="../[+options.moduleUrl+]js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../[+options.moduleUrl+]js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../[+options.moduleUrl+]js/jquery.easytabs.min.js"></script>
+        <script type="text/javascript" src="../[+options.moduleUrl+]js/packagemanager.js"></script>
     </body>
 </html>

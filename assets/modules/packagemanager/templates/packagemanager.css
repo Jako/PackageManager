@@ -77,3 +77,31 @@
 .sectionBody.results {
 	border: 1px solid #658f1a;
 }
+
+.packages .package .button {
+	background: #ededed;
+	border: 1px solid green;
+	cursor: pointer;
+	line-height: normal;
+	padding: 2px;
+	margin: 0 0 4px 2px;
+	background: -moz-linear-gradient(#FFFFFF, #EEEEEE);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#FFFFFF), to(#EEEEEE));
+	background: -o-linear-gradient(#FFFFFF, #EEEEEE);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFFFFF,endColorstr=#EEEEEE);
+	zoom: 1;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-decoration: none;
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+.packages .package .type {
+	font-size: 115%;
+	display: inline-block;
+	width: 60px;
+	vertical-align: text-bottom;
+
+}

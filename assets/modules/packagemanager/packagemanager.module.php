@@ -17,7 +17,7 @@ $options = array();
 $options['moduleId'] = (int) $_GET['id'];
 $options['action'] = isset($_GET['action']) ? trim(strip_tags($_GET['action'])) : 'load';
 $options['managerDir'] = MGR_DIR . '/';
-$options['moduleDir'] = INSTM_PATH;
+$options['moduleUrl'] = INSTM_PATH;
 $options['managerTheme'] = $modx->config['manager_theme'];
 
 $packageManager = new PackageManager($modx, $options);

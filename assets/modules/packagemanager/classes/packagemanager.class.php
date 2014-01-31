@@ -82,17 +82,26 @@ class PackageManager {
 		$this->language = $_lang;
 
 		$this->types = array();
-		$this->types[] = (object) array(
+		$this->types['snippets'] = (object) array(
 					'type' => 'snippets',
-					'name' => $this->language['snippets']
+					'name' => $this->language['snippets'],
+					'name_singular' => $this->language['snippets_singular'],
+					'edit' => 22,
+					'delete' => 25
 		);
-		$this->types[] = (object) array(
+		$this->types['plugins'] = (object) array(
 					'type' => 'plugins',
-					'name' => $this->language['plugins']
+					'name' => $this->language['plugins'],
+					'name_singular' => $this->language['plugins_singular'],
+					'edit' => 102,
+					'delete' => 104
 		);
-		$this->types[] = (object) array(
+		$this->types['modules'] = (object) array(
 					'type' => 'modules',
-					'name' => $this->language['modules']
+					'name' => $this->language['modules'],
+					'name_singular' => $this->language['modules_singular'],
+					'edit' => 108,
+					'delete' => 110
 		);
 
 		$this->options['packagesPath'] = MODX_BASE_PATH . 'assets/packages/';
@@ -157,9 +166,9 @@ class PackageManager {
 	 * @return void
 	 */
 	private function getInstalled() {
-		$types = $this->types;
+		$this->installed = array();
 
-		foreach ($types as $type) {
+		foreach ($this->types as $type) {
 			$this->getInstalledType($type->type);
 		}
 		uasort($this->installed, array($this, 'sortByPackageName'));
@@ -176,7 +185,7 @@ class PackageManager {
 		$res = $this->modx->db->select('*', $this->modx->getFullTableName('site_' . $type));
 		if ($this->modx->db->getRecordCount($res)) {
 			while ($row = $this->modx->db->getRow($res)) {
-				if ($this->installed && !array_key_exists($row['name'], $this->installed)) {
+				if (!array_key_exists($row['name'], $this->installed)) {
 					if (!isset($row['version'])) {
 						$version = (strpos($row['description'], '<strong>') === FALSE) ? 'unknown' : $row['description'];
 						$version = preg_replace('#<strong>(.*)<\/strong>.*#i', '$1', $version);
@@ -187,11 +196,11 @@ class PackageManager {
 						'version' => ($version) ? strtolower($version) : 'unknown',
 						'description' => preg_replace('#<strong>.*<\/strong>(.*)#i', '$1', $row['description']),
 						'name' => $row['name'],
-						'type' => array($type)
+						'type' => array($row['id'] => $type)
 					);
 					$this->installed[$row['name']] = $installed;
 				} else {
-					$this->installed[$row['name']]['type'][] = $type;
+					$this->installed[$row['name']]['type'][$row['id']] = $type;
 				}
 			}
 		}
@@ -235,11 +244,19 @@ class PackageManager {
 		$i = 0;
 		foreach ($filtered as $installed) {
 			$this->chunkie->setPlaceholders($installed, $i);
-			$installedType = array();
-			foreach ($installed['type'] as $value) {
-				$installedType[] = $this->language[$value . '_singular'];
+			$j = 0;
+			foreach ($installed['type'] as $key => $value) {
+				$this->chunkie->setPlaceholder($j . '.name', $this->types[$value]->name_singular, 'type');
+				$this->chunkie->setPlaceholder($j . '.edit', $this->types[$value]->edit, 'type');
+				$this->chunkie->setPlaceholder($j . '.delete', $this->types[$value]->delete, 'type');
+				$this->chunkie->setPlaceholder($j . '.id', $key, 'type');
+				$this->chunkie->setPlaceholder('lang', $this->language, 'type');
+				$this->chunkie->setPlaceholder('options', $this->options, 'type');
+				$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/installedPackageType.template.html'));
+				$this->chunkie->prepareTemplate($j, array(), 'type');
+				$j++;
 			}
-			$this->chunkie->setPlaceholder($i . '.type', implode(', ', $installedType));
+			$this->chunkie->setPlaceholder($i . '.type', $this->chunkie->process('type', "<br/>\n"));
 			$this->chunkie->setPlaceholder('lang', $this->language);
 			$this->chunkie->setPlaceholder('options', $this->options);
 			$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/installedPackage.template.html'));

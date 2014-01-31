@@ -58,6 +58,12 @@ $(document).ready(function() {
 			$('#searchPackages input[name=page]').val(href['page']);
 			filterPackages();
 		});
+		$('a.deleteExtra').click(function(e) {
+			e.preventDefault();
+			if (confirm(moduleLanguage.confirm_delete_extra) == true) {
+				document.location.href = $(this).attr('href');
+			}
+		});
 	}
 
 	function uploadPackages() {
