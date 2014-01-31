@@ -112,12 +112,15 @@ class PackageInstaller {
 		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$docblock = $this->parseDocblock($fileinfo['dirname'], $fileinfo['basename']);
+			$code = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filename)));
+			// remove installer docblock
+			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				$fields = array(
 					'name' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
-					'content' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
+					'content' => $code,
 					'locked' => (isset($docblock['lock_template']) && $docblock['lock_template']) ? 1 : 0
 				);
 				$result[] = $this->installType('templates', $fields, $docblock['version'], $backup);
@@ -177,12 +180,15 @@ class PackageInstaller {
 		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$docblock = $this->parseDocblock($fileinfo['dirname'], $fileinfo['basename']);
+			$code = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filename)));
+			// remove installer docblock
+			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				$fields = array(
 					'name' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
-					'snippet' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
+					'snippet' => $code
 				);
 				$overwrite = ($docblock['overwrite'] == 'false' || $backup) ? TRUE : FALSE;
 				$result[] = $this->installType('htmlsnippets', $fields, $docblock['version'], $overwrite);
@@ -197,6 +203,9 @@ class PackageInstaller {
 		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$docblock = $this->parseDocblock($fileinfo['dirname'], $fileinfo['basename']);
+			$code = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filename)));
+			// remove installer docblock
+			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				if (isset($docblock['dependencies'])) {
 					$this->prepareDepedencies($docblock['name'], $docblock['dependencies']);
@@ -205,7 +214,7 @@ class PackageInstaller {
 					'name' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
-					'modulecode' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
+					'modulecode' => $code,
 					'properties' => $docblock['properties'],
 					'guid' => $docblock['guid'],
 					'enable_sharedparams' => isset($docblock['dependencies'])
@@ -222,12 +231,15 @@ class PackageInstaller {
 		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$docblock = $this->parseDocblock($fileinfo['dirname'], $fileinfo['basename']);
+			$code = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filename)));
+			// remove installer docblock
+			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				$fields = array(
 					'name' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
-					'snippet' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
+					'snippet' => $code,
 					'properties' => $docblock['properties']
 				);
 				$result[] = $this->installType('snippets', $fields, $docblock['version'], $backup);
@@ -242,12 +254,15 @@ class PackageInstaller {
 		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$docblock = $this->parseDocblock($fileinfo['dirname'], $fileinfo['basename']);
+			$code = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filename)));
+			// remove installer docblock
+			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				$fields = array(
 					'name' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
-					'plugincode' => end(preg_split('/(\/\/)?\s*\<\?php/', file_get_contents($filename))),
+					'plugincode' => $code,
 					'properties' => $docblock['properties'],
 					'disabled' => (isset($docblock['disabled']) && $docblock['disabled']) ? 1 : 0
 				);
