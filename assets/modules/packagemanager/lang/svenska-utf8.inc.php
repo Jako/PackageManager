@@ -17,7 +17,7 @@ $_lang['local'] = 'Lokal';
 $_lang['local_intro'] = '<p>Installationsbara lokala paket för den här MODX-installationen. Nya paket i MODX Evolutions paketformat kan laddas upp nedan.</p>
 <p>Du kan installera ett paket genom att klicka på installationsknappen. Om du tar bort ett paket på den här sidan kommer bara installationspaketet att tas bort och inte det installerade paketet i systemet.</p>
 <p>Du kan ladda upp filer i paketformatet för MODX Evolution direkt till katalogen assets/packages. De kommer att upptäckas av pakethanteraren.</p>';
-$_lang['reload'] = 'Reload';
+$_lang['reload'] = 'Ladda om';
 $_lang['close'] = 'Stäng';
 $_lang['close_button'] = 'Stäng [+lang.modulename+]';
 $_lang['no_local_packages'] = 'Det gick inte att hitta några lokala installationsbara paket.';
@@ -31,7 +31,7 @@ $_lang['install'] = 'Installera';
 $_lang['delete'] = 'Ta bort';
 $_lang['edit'] = 'Redigera';
 $_lang['upload'] = 'Ladda upp';
-$_lang['confirm_delete_extra'] = 'Are you sure you want to delete this Extra?';
+$_lang['confirm_delete_extra'] = 'Är du säker på att du vill ta bort detta Extra?';
 $_lang['search_search'] = 'Sök';
 $_lang['search_reset'] = 'Återställ';
 $_lang['temporary_files'] = 'Temporära filer';
