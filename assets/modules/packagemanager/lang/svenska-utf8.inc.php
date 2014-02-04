@@ -62,6 +62,7 @@ $_lang['file_upload_error'] = '[+filename+] laddades inte upp. Är katalogen ass
 $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] finns redan.';
 $_lang['file_upload_error_package'] = '[+filename+] är inte ett giltigt paket för MODX Evolution.';
 $_lang['file_upload_error_type'] = '[+filename+] har fel filtyp.';
+$_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = '[+filename+] kunde inte packas upp. Är katalogen assets/packages skrivbar?';
 $_lang['file_extract_error_open'] = '[+filename+] kunde inte öppnas som en zip-fil.';
 ?>

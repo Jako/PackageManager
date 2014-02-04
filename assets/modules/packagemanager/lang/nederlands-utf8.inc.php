@@ -62,6 +62,7 @@ $_lang['file_upload_error'] = '[+filename+] is niet geupload! Is de map assets/p
 $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] bestaat al.';
 $_lang['file_upload_error_package'] = '[+filename+] is geen geldig Modx Evolution pakket.';
 $_lang['file_upload_error_type'] = '[+filename+] heeft de verkeerde bestandstype.';
+$_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = '[+filename+] niet kan worden uitgepakt. Is de map assets/packages schrijfbaar?';
 $_lang['file_extract_error_open'] = '[+filename+] kan niet worden geopend als zip bestand.';
 ?>

@@ -335,17 +335,17 @@ class PackageManager {
 	/**
 	 * Unzip a local package
 	 *
-	 * @param string $filename
+	 * @param string $file The name of the zip file
 	 * @return string Unzip result message
 	 */
-	private function unzipLocalPackage($filename) {
-		$fileinfo = pathinfo($filename);
+	private function unzipLocalPackage($file) {
+		$fileinfo = pathinfo($file);
 		$extractFolder = $fileinfo['dirname'] . '/' . $fileinfo['filename'];
 		$error = '';
 		if (!file_exists($extractFolder)) {
 			mkdir($extractFolder, intval($this->modx->config['new_folder_permissions'], 8));
 			$zip = new ZipArchive;
-			$res = $zip->open($filename);
+			$res = $zip->open($file);
 			if ($res === TRUE) {
 				if (!$zip->extractTo($extractFolder)) {
 					$error = $this->createMessage(array(
@@ -360,6 +360,49 @@ class PackageManager {
 			$zip->close();
 		}
 		return $error;
+	}
+
+	/**
+	 * Zip a local package
+	 *
+	 * @param string $file The name of the zip file
+	 * @param string $folder The name of the packed folder
+	 * @return string Unzip result message
+	 */
+	private function zipLocalPackage($file, $folder) {
+		$pathinfo = pathinfo($folder);
+		$dirname = $pathInfo['basename'];
+
+		$zip = new ZipArchive();
+		$zip->open($file, ZIPARCHIVE::CREATE);
+		$this->folderToZip($folder, $zip, strlen($folder . '/'));
+		$zip->close();
+	}
+
+	/**
+	 * Add files and sub-directories in a folder to zip file.
+	 *
+	 * @param string $folder
+	 * @param ZipArchive $zipFile
+	 * @param int $prefixLength Number of chars to be removed from the file path.
+	 */
+	private function folderToZip($folder, &$zipFile, $prefixLength) {
+		$handle = opendir($folder);
+		while (false !== $f = readdir($handle)) {
+			if ($f != '.' && $f != '..') {
+				$filePath = "$folder/$f";
+				// Remove prefix from file path before add to zip.
+				$localPath = substr($filePath, $prefixLength);
+				if (is_file($filePath)) {
+					$zipFile->addFile($filePath, $localPath);
+				} elseif (is_dir($filePath)) {
+					// Add sub-directory.
+					$zipFile->addEmptyDir($localPath);
+					self::folderToZip($filePath, $zipFile, $prefixLength);
+				}
+			}
+		}
+		closedir($handle);
 	}
 
 	/**
@@ -480,6 +523,15 @@ class PackageManager {
 					$extractFolder = $this->options['cachePath'] . $tmpname;
 					if (!$result = $this->unzipFile($zipname, $extractFolder)) {
 						$info = $this->getLocalPackagesInfo($extractFolder);
+						// Allow directly downloaded GitHub packages
+						$packageFolder = $extractFolder . '/' . substr($_FILES['upload']['name'], 0, -4);
+						if (!$info && file_exists($packageFolder)) {
+							$info = $this->getLocalPackagesInfo($packageFolder);
+							if ($info) {
+								unlink($zipname);
+								$this->zipLocalPackage($zipname, $packageFolder);
+							}
+						}
 						if ($info) {
 							$info = reset($info);
 							$newname = strtolower($info[name]) . '-' . strtolower($info['version']) . '.zip';
@@ -515,9 +567,15 @@ class PackageManager {
 							), '[+lang.file_upload_error_type+]');
 				}
 			} else {
-				$result = $this->createMessage(array(
-					'filename' => $_FILES['upload']['name']
-						), '[+lang.file_upload_error+]');
+				if ($_FILES['upload']['name']) {
+					$result = $this->createMessage(array(
+						'filename' => $_FILES['upload']['name']
+							), '[+lang.file_upload_error+]');
+				} else {
+					$result = $this->createMessage(array(
+						'filename' => $_FILES['upload']['name']
+							), '[+lang.file_upload_nofile+]');
+				}
 			}
 		}
 		return $result;

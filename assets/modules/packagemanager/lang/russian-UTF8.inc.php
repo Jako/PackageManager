@@ -62,6 +62,7 @@ $_lang['file_upload_error'] = 'Не удалось загрузить [+filename
 $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] уже существует.';
 $_lang['file_upload_error_package'] = '[+filename+] не является пакетом MODX Evolution.';
 $_lang['file_upload_error_type'] = 'Неверный тип файла [+filename+].';
+$_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = 'Не удалось распаковать [+filename+]. Проверьте права на папку assets/packages.';
 $_lang['file_extract_error_open'] = '[+filename+] не является zip-архивом.';
 ?>

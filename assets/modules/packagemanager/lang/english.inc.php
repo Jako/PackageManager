@@ -62,6 +62,7 @@ $_lang['file_upload_error'] = '[+filename+] was not uploaded. Is the folder asse
 $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] already exists.';
 $_lang['file_upload_error_package'] = '[+filename+] is not a valid MODX Evolution package.';
 $_lang['file_upload_error_type'] = '[+filename+] has the wrong file type.';
+$_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = '[+filename+] could not be extracted. Is the folder assets/packages writable?';
 $_lang['file_extract_error_open'] = '[+filename+] could not be opened as zip file.';
 ?>

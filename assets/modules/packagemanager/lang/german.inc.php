@@ -62,6 +62,7 @@ $_lang['file_upload_error'] = '[+filename+] wurde nicht hochgeladen. Ist der Ord
 $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] existiert schon.';
 $_lang['file_upload_error_package'] = '[+filename+] ist kein gültiges MODX Evolution Package.';
 $_lang['file_upload_error_type'] = '[+filename+] hat den falschen Datei-Typ.';
+$_lang['file_upload_nofile'] = 'Es wurde keine Datei hochgeladen.';
 $_lang['file_extract_error'] = '[+filename+] konnte nicht entpackt werden. Is der Ordner assets/packages beschreibbar?';
 $_lang['file_extract_error_open'] = '[+filename+] konnte nicht als ZIP-Datei geöffnet werden.';
 ?>
