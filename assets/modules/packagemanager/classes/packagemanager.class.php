@@ -112,6 +112,13 @@ class PackageManager {
 			mkdir($this->options['cachePath'], intval($this->modx->config['new_folder_permissions'], 8));
 		}
 
+		if (!file_exists($this->options['packagesPath'])) {
+			mkdir($this->options['packagesPath'], intval($this->modx->config['new_folder_permissions'], 8));
+			if (!file_exists($this->options['packagesPath'])) {
+				$modx->messageQuit($this->language['run_error_packages_folder']);
+			}
+		}
+
 		if (!class_exists('newChunkie')) {
 			include_once INSTM_BASE_PATH . 'classes/newchunkie.class.php';
 		}
