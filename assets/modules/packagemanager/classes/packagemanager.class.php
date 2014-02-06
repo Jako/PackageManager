@@ -388,7 +388,10 @@ class PackageManager {
 	 */
 	private function folderToZip($folder, &$zipFile, $prefixLength) {
 		$handle = opendir($folder);
-		while (false !== $f = readdir($handle)) {
+		if (!$handle) {
+			die(var_dump($folder));
+		}
+		while (FALSE !== $f = readdir($handle)) {
 			if ($f != '.' && $f != '..') {
 				$filePath = "$folder/$f";
 				// Remove prefix from file path before add to zip.
@@ -414,7 +417,8 @@ class PackageManager {
 	private function getLocalPackagesInfo($path = '') {
 		$packages = array();
 		$path = ($path) ? $path : $this->options['packagesPath'];
-		foreach (glob($path . '*/install/assets/*/*.tpl') as $filename) {
+		$filenames = (glob($path . '*/install/assets/*/*.tpl')) ? glob($path . '*/install/assets/*/*.tpl') : array();
+		foreach ($filenames as $filename) {
 			$fileinfo = pathinfo($filename);
 			$parts = array();
 			if (preg_match('#([^\/]*)\/([^\/]*)\/([^\/]*)\/([^\/]*)$#', $fileinfo['dirname'], $parts)) {
@@ -515,51 +519,28 @@ class PackageManager {
 	private function uploadLocalResult() {
 		$result = '';
 		if (isset($_POST['submit_upload']) && isset($_FILES['upload'])) {
-			if (!$_FILES['upload']['error']) {
+			if (!$_FILES['upload']['error'] || (isset($_POST['remote']) && $_POST['remote'] != '')) {
+				$tmpname = uniqid('package_');
+				$zipname = $this->options['cachePath'] . $tmpname . '.zip';
+				$extractFolder = $this->options['cachePath'] . $tmpname;
 				if ($_FILES['upload']['type'] == 'application/zip' || $_FILES['upload']['type'] == 'application/x-zip-compressed' || $_FILES['upload']['type'] == 'multipart/x-zip' || $_FILES['upload']['type'] == 'application/x-compressed' || $_FILES['upload']['type'] == 'application/octet-stream') {
-					$tmpname = uniqid('package_');
-					$zipname = $this->options['cachePath'] . $tmpname . '.zip';
 					move_uploaded_file($_FILES['upload']['tmp_name'], $zipname);
-					$extractFolder = $this->options['cachePath'] . $tmpname;
-					if (!$result = $this->unzipFile($zipname, $extractFolder)) {
-						$info = $this->getLocalPackagesInfo($extractFolder);
-						// Allow directly downloaded GitHub packages
-						$packageFolder = $extractFolder . '/' . substr($_FILES['upload']['name'], 0, -4);
-						if (!$info && file_exists($packageFolder)) {
-							$info = $this->getLocalPackagesInfo($packageFolder);
-							if ($info) {
-								unlink($zipname);
-								$this->zipLocalPackage($zipname, $packageFolder);
-							}
-						}
-						if ($info) {
-							$info = reset($info);
-							$newname = strtolower($info[name]) . '-' . strtolower($info['version']) . '.zip';
-							if (file_exists($this->options['packagesPath'] . $newname)) {
-								$result = $this->createMessage(array(
-									'package' => $info[name] . ' ' . $info['version']
-										), '[+lang.file_upload_error_exists+]');
-							} else {
-								if (!rename($zipname, $this->options['packagesPath'] . $newname)) {
-									unlink($zipname);
-									$this->removeFolder($extractFolder);
-									$result = $this->createMessage(array(
-										'filename' => $_FILES['upload']['name']
-											), '[+lang.file_upload_error+]');
-								} else {
-									$this->removeFolder($extractFolder);
-									$result = $this->createMessage(array(
-										'filename' => $_FILES['upload']['name']
-											), '[+lang.file_upload_success+]');
-								}
-							}
-						} else {
-							unlink($zipname);
-							$this->removeFolder($extractFolder);
-							$result = $this->createMessage(array(
-								'filename' => $_FILES['upload']['name']
-									), '[+lang.file_upload_error_package+]');
-						}
+					// Allow directly downloaded GitHub packages
+					$packageFolder = $extractFolder . '/' . substr($_FILES['upload']['name'], 0, -4);
+					$result = $this->uploadLocalCheck($zipname, $extractFolder, $packageFolder);
+				} elseif (isset($_POST['remote']) && $_POST['remote'] != '') {
+					$fp = fopen($zipname, 'w+');
+					$ch = curl_init($_POST['remote']);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+					curl_setopt($ch, CURLOPT_FILE, $fp);
+					$this->curl_exec_follow($ch);
+					curl_close($ch);
+					fclose($fp);
+					$remotePath = pathinfo($_POST['remote']);
+					if ($remotePath['dirname'] != '.') {
+						$result = $this->uploadLocalCheck($zipname, $extractFolder, substr($remotePath['basename'], 0, -4));
+					} else {
+						$result = 'No file';
 					}
 				} else {
 					$result = $this->createMessage(array(
@@ -576,6 +557,58 @@ class PackageManager {
 						'filename' => $_FILES['upload']['name']
 							), '[+lang.file_upload_nofile+]');
 				}
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Check uploaded file and move to package folder on success
+	 *
+	 * @param type $zipname Name of the uploaded zip file
+	 * @param type $extractFolder
+	 * @return type
+	 */
+	private function uploadLocalCheck($zipname, $extractFolder, $packageFolder) {
+		$result = '';
+		if (!$result = $this->unzipFile($zipname, $extractFolder)) {
+			$info = $this->getLocalPackagesInfo($extractFolder);
+			$subfolders = glob($extractFolder . '/*', GLOB_ONLYDIR);
+			if (!$info && $subfolders) {
+				$info = $this->getLocalPackagesInfo($subfolders[0]);
+				if ($info) {
+					unlink($zipname);
+					$this->zipLocalPackage($zipname, $subfolders[0]);
+				}
+			}
+			if ($info) {
+				$info = reset($info);
+				$newname = strtolower($info[name]) . '-' . strtolower($info['version']) . '.zip';
+				$packagename = $info[name] . ' ' . $info['version'];
+				if (file_exists($this->options['packagesPath'] . $newname)) {
+					$result = $this->createMessage(array(
+						'package' => $info[name] . ' ' . $info['version']
+							), '[+lang.file_upload_error_exists+]');
+				} else {
+					if (!rename($zipname, $this->options['packagesPath'] . $newname)) {
+						unlink($zipname);
+						$this->removeFolder($extractFolder);
+						$result = $this->createMessage(array(
+							'filename' => $packagename
+								), '[+lang.file_upload_error+]');
+					} else {
+						$this->removeFolder($extractFolder);
+						$result = $this->createMessage(array(
+							'filename' => $packagename
+								), '[+lang.file_upload_success+]');
+					}
+				}
+			} else {
+				unlink($zipname);
+				$this->removeFolder($extractFolder);
+				$result = $this->createMessage(array(
+					'filename' => ($_FILES['upload']['name'] != '') ? $_FILES['upload']['name'] : $this->language['remote_files_singular']
+						), '[+lang.file_upload_error_package+]');
 			}
 		}
 		return $result;
@@ -645,22 +678,22 @@ class PackageManager {
 			$tpl = @fopen($folder . '/' . $filename, 'r');
 			if ($tpl) {
 				$result['filename'] = $filename;
-				$docblockStartFound = false;
-				$nameFound = false;
-				$descriptionFound = false;
-				$docblockEndFound = false;
+				$docblockStartFound = FALSE;
+				$nameFound = FALSE;
+				$descriptionFound = FALSE;
+				$docblockEndFound = FALSE;
 
 				while (!feof($tpl)) {
 					$line = fgets($tpl);
 					if (!$docblockStartFound) {
 						// find docblock start
-						if (strpos($line, '/**') !== false) {
-							$docblockStartFound = true;
+						if (strpos($line, '/**') !== FALSE) {
+							$docblockStartFound = TRUE;
 						}
 						continue;
 					} elseif (!$nameFound) {
 						// find name
-						$ma = null;
+						$ma = NULL;
 						if (preg_match('/^\s+\*\s+(.+)/', $line, $ma)) {
 							$result['name'] = trim($ma[1]);
 							$nameFound = !empty($result['name']);
@@ -668,20 +701,20 @@ class PackageManager {
 						continue;
 					} elseif (!$descriptionFound) {
 						// find description
-						$ma = null;
+						$ma = NULL;
 						if (preg_match('/^\s+\*\s+(.+)/', $line, $ma)) {
 							$result['description'] = trim($ma[1]);
 							$descriptionFound = !empty($result['description']);
 						}
 						continue;
 					} else {
-						$ma = null;
+						$ma = NULL;
 						if (preg_match('/^\s+\*\s+\@([^\s]+)\s+(.+)/', $line, $ma)) {
 							$param = trim($ma[1]);
 							$val = trim($ma[2]);
 							if (!empty($param) && !empty($val)) {
 								if ($param == 'internal') {
-									$ma = null;
+									$ma = NULL;
 									if (preg_match('/\@([^\s]+)\s+(.+)/', $val, $ma)) {
 										$param = trim($ma[1]);
 										$val = trim($ma[2]);
@@ -693,7 +726,7 @@ class PackageManager {
 								$result[$param] = $val;
 							}
 						} elseif (preg_match('/^\s*\*\/\s*$/', $line)) {
-							$docblockEndFound = true;
+							$docblockEndFound = TRUE;
 							break;
 						}
 					}
@@ -754,6 +787,60 @@ class PackageManager {
 			}
 		}
 		rmdir($folder);
+	}
+
+	/**
+	 * Expanded curl_exec function
+	 * See http://www.php.net/manual/en/function.curl-setopt.php#102121
+	 *
+	 * @param resource $ch
+	 * @param int $maxredirect
+	 * @return mixed
+	 */
+	private function curl_exec_follow($ch, &$maxredirect = NULL) {
+		$mr = ($maxredirect === NULL) ? 5 : intval($maxredirect);
+		if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $mr > 0);
+			curl_setopt($ch, CURLOPT_MAXREDIRS, $mr);
+		} else {
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+			if ($mr > 0) {
+				$newurl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+
+				$rch = curl_init();
+				curl_setopt($rch, CURLOPT_HEADER, TRUE);
+				curl_setopt($rch, CURLOPT_NOBODY, TRUE);
+				curl_setopt($rch, CURLOPT_FORBID_REUSE, FALSE);
+				curl_setopt($rch, CURLOPT_RETURNTRANSFER, TRUE);
+				do {
+					curl_setopt($rch, CURLOPT_URL, $newurl);
+					$header = curl_exec($rch);
+					if (curl_errno($rch)) {
+						$code = 0;
+					} else {
+						$code = curl_getinfo($rch, CURLINFO_HTTP_CODE);
+						if ($code == 301 || $code == 302) {
+							preg_match('/Location:(.*?)\n/', $header, $matches);
+							$newurl = trim(array_pop($matches));
+						} else {
+							$code = 0;
+						}
+					}
+				} while ($code && --$mr);
+				curl_close($rch);
+				if (!$mr) {
+					if ($maxredirect === NULL) {
+						die('test');
+						trigger_error('Too many redirects. When following redirects, libcurl hit the maximum amount.', E_USER_WARNING);
+					} else {
+						$maxredirect = 0;
+					}
+					return FALSE;
+				}
+				curl_setopt($ch, CURLOPT_URL, $newurl);
+			}
+		}
+		return curl_exec($ch);
 	}
 
 }

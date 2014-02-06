@@ -3,9 +3,8 @@
 	<div class="sectionBody">
 		[+uploadResult+]
 		<form id="uploadPackage" method="post" action="index.php?a=112&id=[+options.moduleId+]" enctype="multipart/form-data">
-			<input type="file" value="" name="upload">
-			<input type="submit" name="submit_upload" value="[+lang.upload+]"/>
+			<div class="group"><label>[+lang.upload_local+]</label> <input type="file" value="" name="upload"></div>
+			<div class="group"><label>[+lang.upload_remote+]</label> <input type="text" value="" name="remote"> <input type="submit" name="submit_upload" value="[+lang.upload+]"/></div>
 		</form>
 	</div>
-
 </div>
