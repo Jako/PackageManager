@@ -584,7 +584,7 @@ class PackageManager {
 			}
 			if ($info) {
 				$info = reset($info);
-				$newname = strtolower($info[name]) . '-' . strtolower($info['version']) . '.zip';
+				$newname = $this->validFilename(strtolower($info[name]) . '-' . strtolower($info['version']) . '.zip');
 				$packagename = $info[name] . ' ' . $info['version'];
 				if (file_exists($this->options['packagesPath'] . $newname)) {
 					$result = $this->createMessage(array(
@@ -842,6 +842,16 @@ class PackageManager {
 			}
 		}
 		return curl_exec($ch);
+	}
+
+	/**
+	 * Create valid filename by replave not allowed characters
+	 *
+	 * @param string $name Filename to check
+	 * @param string Valid filename
+	 */
+	private function validFilename($name) {
+		return (preg_replace('/[^0-9a-z\/\._-]+/', '', $name));
 	}
 
 }
