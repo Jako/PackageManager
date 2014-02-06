@@ -5,7 +5,7 @@
  * Easy install extra packages
  *
  * @category 	module
- * @version 	0.9
+ * @version 	1.0-RC
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @author      Jako
  * @internal	@modx_category Manager and Admin

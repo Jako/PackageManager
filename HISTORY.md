@@ -3,3 +3,5 @@ History
 
 - 0.9 (31-01-2014)
 	- Initial public release
+- 1.0-RC (06-02-2014)
+	- Initial public release

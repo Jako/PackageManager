@@ -5,7 +5,7 @@
  * @package packagemanager
  * @subpackage installer_class_file
  *
- * @version 0.9
+ * @version 1.0-RC
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
