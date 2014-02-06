@@ -69,4 +69,5 @@ $_lang['file_upload_error_type'] = 'Неверный тип файла [+filenam
 $_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = 'Не удалось распаковать [+filename+]. Проверьте права на папку assets/packages.';
 $_lang['file_extract_error_open'] = '[+filename+] не является zip-архивом.';
+$_lang['run_error_packages_folder'] = 'The folder assets/packages could not be created. Please create it yourself and make it writable for PHP.';
 ?>

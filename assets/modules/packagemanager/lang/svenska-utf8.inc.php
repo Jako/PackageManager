@@ -69,4 +69,5 @@ $_lang['file_upload_error_type'] = '[+filename+] har fel filtyp.';
 $_lang['file_upload_nofile'] = 'Ingen fil laddades upp.';
 $_lang['file_extract_error'] = '[+filename+] kunde inte packas upp. Är katalogen assets/packages skrivbar?';
 $_lang['file_extract_error_open'] = '[+filename+] kunde inte öppnas som en zip-fil.';
+$_lang['run_error_packages_folder'] = 'The folder assets/packages could not be created. Please create it yourself and make it writable for PHP.';
 ?>

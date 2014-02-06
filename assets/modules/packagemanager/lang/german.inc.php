@@ -69,4 +69,5 @@ $_lang['file_upload_error_type'] = '[+filename+] hat den falschen Datei-Typ.';
 $_lang['file_upload_nofile'] = 'Es wurde keine Datei hochgeladen.';
 $_lang['file_extract_error'] = '[+filename+] konnte nicht entpackt werden. Is der Ordner assets/packages beschreibbar?';
 $_lang['file_extract_error_open'] = '[+filename+] konnte nicht als ZIP-Datei geöffnet werden.';
+$_lang['run_error_packages_folder'] = 'Der Ordner assets/packages kann nicht angelegt werden. Bitte legen Sie ihn selbst an und machen Sie ihn für PHP beschreibbar.';
 ?>
