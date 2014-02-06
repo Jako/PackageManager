@@ -388,9 +388,6 @@ class PackageManager {
 	 */
 	private function folderToZip($folder, &$zipFile, $prefixLength) {
 		$handle = opendir($folder);
-		if (!$handle) {
-			die(var_dump($folder));
-		}
 		while (FALSE !== $f = readdir($handle)) {
 			if ($f != '.' && $f != '..') {
 				$filePath = "$folder/$f";
