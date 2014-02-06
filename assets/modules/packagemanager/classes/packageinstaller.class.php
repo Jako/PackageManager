@@ -40,7 +40,7 @@ class PackageInstaller {
 
 	/**
 	 * Internal package depedencies.
-	 * @var array $types
+	 * @var array $depedencies
 	 * @access private
 	 */
 	private $depedencies;
@@ -87,7 +87,8 @@ class PackageInstaller {
 
 	private function installFiles($path, $backup) {
 		$result = array();
-		foreach (glob($path . 'assets/*/*') as $foldername) {
+		// copy and backup all extra folders
+		foreach (glob($path . 'assets/*/*', GLOB_ONLYDIR) as $foldername) {
 			$parts = array();
 			preg_match('#([^\/]*)\/([^\/]*)$#', $foldername, $parts);
 			$type = $parts[1];
@@ -102,6 +103,18 @@ class PackageInstaller {
 			$result[] = $this->createMessage(array(
 				'folder' => $this->options['assetsPath'] . $type . '/' . $folder
 					), '[+lang.install_files_success+]');
+		}
+		// copy all other folders
+		foreach (glob($path . 'assets/*', GLOB_ONLYDIR) as $foldername) {
+			$parts = array();
+			preg_match('#([^\/]*)$#', $foldername, $parts);
+			$type = $parts[1];
+			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets'))) {
+				$this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
+				$result[] = $this->createMessage(array(
+					'folder' => $this->options['assetsPath'] . $type . '/' . $folder
+						), '[+lang.install_files_success+]');
+			}
 		}
 		return $result;
 	}
