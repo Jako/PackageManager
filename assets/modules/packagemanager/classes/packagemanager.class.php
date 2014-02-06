@@ -377,9 +377,6 @@ class PackageManager {
 	 * @return string Unzip result message
 	 */
 	private function zipLocalPackage($file, $folder) {
-		$pathinfo = pathinfo($folder);
-		$dirname = $pathInfo['basename'];
-
 		$zip = new ZipArchive();
 		$zip->open($file, ZIPARCHIVE::CREATE);
 		$this->folderToZip($folder, $zip, strlen($folder . '/'));
@@ -531,7 +528,7 @@ class PackageManager {
 					move_uploaded_file($_FILES['upload']['tmp_name'], $zipname);
 					// Allow directly downloaded GitHub packages
 					$packageFolder = $extractFolder . '/' . substr($_FILES['upload']['name'], 0, -4);
-					$result = $this->uploadLocalCheck($zipname, $extractFolder, $packageFolder);
+					$result = $this->uploadLocalCheck($zipname, $extractFolder);
 				} elseif (isset($_POST['remote']) && $_POST['remote'] != '') {
 					$fp = fopen($zipname, 'w+');
 					$ch = curl_init($_POST['remote']);
@@ -542,7 +539,7 @@ class PackageManager {
 					fclose($fp);
 					$remotePath = pathinfo($_POST['remote']);
 					if ($remotePath['dirname'] != '.') {
-						$result = $this->uploadLocalCheck($zipname, $extractFolder, substr($remotePath['basename'], 0, -4));
+						$result = $this->uploadLocalCheck($zipname, $extractFolder);
 					} else {
 						$result = 'No file';
 					}
@@ -573,7 +570,7 @@ class PackageManager {
 	 * @param type $extractFolder
 	 * @return type
 	 */
-	private function uploadLocalCheck($zipname, $extractFolder, $packageFolder) {
+	private function uploadLocalCheck($zipname, $extractFolder) {
 		$result = '';
 		if (!$result = $this->unzipFile($zipname, $extractFolder)) {
 			$info = $this->getLocalPackagesInfo($extractFolder);
