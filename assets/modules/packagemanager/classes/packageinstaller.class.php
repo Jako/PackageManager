@@ -66,7 +66,7 @@ class PackageInstaller {
 	function installPackage($package, $backup = FALSE) {
 		$result = array();
 		$foldername = $this->options['packagesPath'] . $package . '/';
-		$result = array_merge($result, $this->installFiles($foldername, $backup));
+		$result = array_merge($result, $this->installFiles($foldername, $backup, $package));
 		$result = array_merge($result, $this->installTemplates($foldername, $backup));
 		$result = array_merge($result, $this->installTemplateVariables($foldername, $backup));
 		$result = array_merge($result, $this->installChunks($foldername, $backup));
@@ -85,7 +85,7 @@ class PackageInstaller {
 		return $result;
 	}
 
-	private function installFiles($path, $backup) {
+	private function installFiles($path, $backup, $package) {
 		$result = array();
 		// copy and backup all extra folders
 		foreach (glob($path . 'assets/*/*', GLOB_ONLYDIR) as $foldername) {
@@ -93,7 +93,8 @@ class PackageInstaller {
 			preg_match('#([^\/]*)\/([^\/]*)$#', $foldername, $parts);
 			$type = $parts[1];
 			$folder = $parts[2];
-			if ($backup && file_exists($this->options['assetsPath'] . $type . '/' . $folder)) {
+			// move files to backup if the package name starts with the folder name
+			if ($backup && file_exists($this->options['assetsPath'] . $type . '/' . $folder) && strpos($package, $folder) === 0) {
 				rename($this->options['assetsPath'] . $type . '/' . $folder, $this->options['assetsPath'] . $type . '/' . $folder . '.old');
 				$result[] = $this->createMessage(array(
 					'folder' => $this->options['assetsPath'] . $type . '/' . $folder . '.old'
@@ -112,7 +113,7 @@ class PackageInstaller {
 			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets'))) {
 				$this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
 				$result[] = $this->createMessage(array(
-					'folder' => $this->options['assetsPath'] . $type . '/' . $folder
+					'folder' => $this->options['assetsPath'] . $type
 						), '[+lang.install_files_success+]');
 			}
 		}
