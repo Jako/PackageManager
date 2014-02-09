@@ -70,4 +70,5 @@ $_lang['file_upload_nofile'] = 'No file was uploaded.';
 $_lang['file_extract_error'] = '[+filename+] could not be extracted. Is the folder assets/packages writable?';
 $_lang['file_extract_error_open'] = '[+filename+] could not be opened as zip file.';
 $_lang['run_error_packages_folder'] = 'The folder assets/packages could not be created. Please create it yourself and make it writable for PHP.';
+$_lang['user_error_privileges'] = 'You don\'t have enough privileges for installing packages!';
 ?>

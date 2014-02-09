@@ -64,23 +64,28 @@ class PackageInstaller {
 	}
 
 	function installPackage($package, $backup = FALSE) {
-		$result = array();
-		$foldername = $this->options['packagesPath'] . $package . '/';
-		$result = array_merge($result, $this->installFiles($foldername, $backup, $package));
-		$result = array_merge($result, $this->installTemplates($foldername, $backup));
-		$result = array_merge($result, $this->installTemplateVariables($foldername, $backup));
-		$result = array_merge($result, $this->installChunks($foldername, $backup));
-		$result = array_merge($result, $this->installModules($foldername, $backup));
-		$result = array_merge($result, $this->installSnippets($foldername, $backup));
-		$result = array_merge($result, $this->installPlugins($foldername, $backup));
-		$result = array_merge($result, $this->setDepedencies());
+		if ($modx->hasPermission('new_template') && $modx->hasPermission('new_chunk') && $modx->hasPermission('new_module') && $modx->hasPermission('new_snippet') && $modx->hasPermission('new_plugin')) {
+			$result = array();
+			$foldername = $this->options['packagesPath'] . $package . '/';
+			$result = array_merge($result, $this->installFiles($foldername, $backup, $package));
+			$result = array_merge($result, $this->installTemplates($foldername, $backup));
+			$result = array_merge($result, $this->installTemplateVariables($foldername, $backup));
+			$result = array_merge($result, $this->installChunks($foldername, $backup));
+			$result = array_merge($result, $this->installModules($foldername, $backup));
+			$result = array_merge($result, $this->installSnippets($foldername, $backup));
+			$result = array_merge($result, $this->installPlugins($foldername, $backup));
+			$result = array_merge($result, $this->setDepedencies());
 
-		// Always empty cache after install
-		include MODX_BASE_PATH . $this->options['managerDir'] . 'processors/cache_sync.class.processor.php';
-		$sync = new synccache();
-		$sync->setCachepath(MODX_BASE_PATH . 'assets/cache/');
-		$sync->setReport(false);
-		$sync->emptyCache();
+			// Always empty cache after install
+			include MODX_BASE_PATH . $this->options['managerDir'] . 'processors/cache_sync.class.processor.php';
+			$sync = new synccache();
+			$sync->setCachepath(MODX_BASE_PATH . 'assets/cache/');
+			$sync->setReport(false);
+			$sync->emptyCache();
+		} else {
+			$result[] = $this->createMessage(array(
+					), '[+lang.user_error_privileges+]');
+		}
 
 		return $result;
 	}
