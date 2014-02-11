@@ -40,8 +40,6 @@ $_lang['install'] = 'Installera';
 $_lang['delete'] = 'Ta bort';
 $_lang['edit'] = 'Redigera';
 $_lang['upload'] = 'Ladda upp';
-$_lang['upload_local'] = 'Local file:';
-$_lang['upload_remote'] = 'Remote url:';
 $_lang['confirm_delete_extra'] = 'Är du säker på att du vill ta bort detta Extra?';
 $_lang['search_search'] = 'Sök';
 $_lang['search_reset'] = 'Återställ';
@@ -67,7 +65,6 @@ $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] finns
 $_lang['file_upload_error_package'] = '[+filename+] är inte ett giltigt paket för MODX Evolution.';
 $_lang['file_upload_error_type'] = '[+filename+] har fel filtyp.';
 $_lang['file_upload_nofile'] = 'Ingen fil laddades upp.';
-$_lang['file_extract_error'] = '[+filename+] kunde inte packas upp. Är katalogen assets/packages skrivbar?';
+$_lang['file_extract_error'] = '[+filename+] kunde inte packas upp. Är katalogen [+destination+] skrivbar?';
 $_lang['file_extract_error_open'] = '[+filename+] kunde inte öppnas som en zip-fil.';
-$_lang['run_error_packages_folder'] = 'The folder assets/packages could not be created. Please create it yourself and make it writable for PHP.';
 ?>

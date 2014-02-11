@@ -61,7 +61,15 @@ $(document).ready(function() {
 		$('a.deleteExtra').click(function(e) {
 			e.preventDefault();
 			if (confirm(moduleLanguage.confirm_delete_extra) == true) {
-				document.location.href = $(this).attr('href');
+				$.ajax({
+					type: 'GET',
+					url: $(this).attr('href'),
+					success: function(data) {
+						$('#packagesInstalled').html(data);
+						filterPackagesEvents();
+					},
+					dataType: 'text'
+				});
 			}
 		});
 	}
