@@ -6,7 +6,7 @@ for the MODX Evolution content management framework
 
 Features
 --------------------------------------------------------------------------------
-With this Module you could easy install extra packages in MODX Evolution. Just download the extra package zip file (see note 1), upload it (see note 2) in the Package Manager Module and install it. All Snippets, Plugins and Modules are created with no hazzle.
+With this Module you could easy install extra packages in MODX Evolution. Just download the extra package zip file (see note 1), upload it (see note 2) in the Package Manager Module and install it. You could also direct upload a MODX Evolution Package from a remote url. All Snippets, Plugins and Modules are created with no hazzle.
 
 Installation
 --------------------------------------------------------------------------------
