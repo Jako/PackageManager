@@ -14,9 +14,9 @@ $_lang['packages'] = 'Paket';
 $_lang['package'] = 'Paket';
 $_lang['packages_intro'] = '<p>Installerade paket i den här installationen.</p>';
 $_lang['local'] = 'Lokal';
-$_lang['local_intro'] = '<p>Installable local packages on this MODX installation. New packages in the MODX Evolution Package Format could be uploaded below.</p>
-<p>You could install each package by clicking on the install button. If you delete a package on this page, only the installation package will be removed and not the installed package in the system.</p>
-<p>If you want, you could upload files in the MODX Evolution Package Format directly in the assets/packages folder. These are recognized by the Package Manager.</p>';
+$_lang['local_intro'] = '<p>Installationsbara lokala paket för den här MODX-installationen. Nya paket i MODX Evolutions paketformat kan laddas upp nedan.</p>
+<p>Du kan installera ett paket genom att klicka på installationsknappen. Om du tar bort ett paket på den här sidan kommer bara installationspaketet att tas bort och inte det installerade paketet i systemet.</p>
+<p>Du kan ladda upp filer i paketformatet för MODX Evolution direkt till katalogen assets/packages. De kommer att upptäckas av pakethanteraren.</p>';
 $_lang['reload'] = 'Ladda om';
 $_lang['close'] = 'Stäng';
 $_lang['close_button'] = 'Stäng [+lang.modulename+]';

@@ -14,9 +14,9 @@ $_lang['packages'] = 'Extras';
 $_lang['package'] = 'Extra';
 $_lang['packages_intro'] = '<p>Installierte Extras in dieser MODX Installation.</p>';
 $_lang['local'] = 'Lokal';
-$_lang['local_intro'] = '<p>Installable local packages on this MODX installation. New packages in the MODX Evolution Package Format could be uploaded below.</p>
-<p>You could install each package by clicking on the install button. If you delete a package on this page, only the installation package will be removed and not the installed package in the system.</p>
-<p>If you want, you could upload files in the MODX Evolution Package Format directly in the assets/packages folder. These are recognized by the Package Manager.</p>';
+$_lang['local_intro'] = '<p>Installierbare lokale Extras in dieser MODX Installation. Neue Extras im MODX Evolution Package Format können unterhalb hochgeladen werden.</p>
+<p>Sie können jedes Extra installieren, indem Sie auf den Installieren Button klicken. Wenn Sie ein Extra auf dieser Seite löschen, wird nur das Installations Paket gelöscht und nicht das installierte Paket im System.</p>
+<p>Sie können Dateien im MODX Evolution Package Format direkt im Ordner assets/packages in Ihrer MODX Installation hochladen. Diese werden vom Package-Manager erkannt.</p>';
 $_lang['reload'] = 'Neu laden';
 $_lang['close'] = 'Schließen';
 $_lang['close_button'] = '[+lang.modulename+] Schließen';
