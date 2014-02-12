@@ -1,4 +1,15 @@
 <?php
+/*
+ * Package Manager
+ *
+ * @package packagemanager
+ * @subpackage module
+ *
+ * @version 1.0.RC2
+ * @author Thomas Jakobi <thomas.jakobi@partout.info>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
 if (IN_MANAGER_MODE != 'true') {
 	die('<h1>ERROR:</h1><p>Please use the MODx Content Manager instead of accessing this file directly.</p>');
 }
