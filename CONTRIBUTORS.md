@@ -12,3 +12,7 @@ Marc - https://github.com/fourroses666 - info@graffx.nl
 Pontus Ågren - https://github.com/Pont
 
 - Swedish language
+
+luigif - https://github.com/luigif
+
+- Italian language
