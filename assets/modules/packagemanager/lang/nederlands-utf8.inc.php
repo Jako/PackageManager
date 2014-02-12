@@ -14,9 +14,9 @@ $_lang['packages'] = 'Pakketten';
 $_lang['package'] = 'Pakket';
 $_lang['packages_intro'] = '<p>Geïnstalleerde pakketten.</p>';
 $_lang['local'] = 'Lokaal';
-$_lang['local_intro'] = '<p>Installeerbare lokale pakketten in deze MODX Installatie. Nieuwe pakketten in het MODX Evolution Pakket formaat kan hieronder worden geüpload.</p>
-<p>Je zou elk pakket kunnen installeren door te klikken op de knop Installeren. Als u een pakket verwijderen op deze pagina, wordt alleen het installatiepakket verwijderd en niet het geïnstalleerde pakket in het systeem.</p>
-<p>Als je wilt kun je bestanden in het MODX Evolution Pakket rechtstreeks in de map assets/packages uploaden. Deze zijn erkend door de Pakket Manager.</p>';
+$_lang['local_intro'] = '<p>Installable local packages on this MODX installation. New packages in the MODX Evolution Package Format could be uploaded below.</p>
+<p>You could install each package by clicking on the install button. If you delete a package on this page, only the installation package will be removed and not the installed package in the system.</p>
+<p>If you want, you could upload files in the MODX Evolution Package Format directly in the assets/packages folder. These are recognized by the Package Manager.</p>';
 $_lang['reload'] = 'Herladen';
 $_lang['close'] = 'Sluit';
 $_lang['close_button'] = 'Sluit [+lang.modulename+]';
@@ -42,6 +42,7 @@ $_lang['edit'] = 'Aanpassen';
 $_lang['upload'] = 'Uploaden';
 $_lang['upload_local'] = 'Lokaal bestand:';
 $_lang['upload_remote'] = 'Externe URL:';
+$_lang['results'] = 'Resultaten';
 $_lang['confirm_delete_extra'] = 'Weet u zeker dat u deze Extra wilt verwijderen?';
 $_lang['search_search'] = 'Zoeken';
 $_lang['search_reset'] = 'Reset';
@@ -60,6 +61,9 @@ $_lang['install_files_success_backup'] = 'Backup van pakketbestanden zijn opgesl
 $_lang['install_depedency_created'] = '[+modulename+] Module: Afhankelijkheden zijn gecreëerd.';
 $_lang['install_depedency_updated'] = '[+modulename+] Module: Afhankelijkheden zijn geupdate.';
 $_lang['install_depedency_guid_set'] = '[+type+] [+depedencyname+]: GUID set.';
+$_lang['delete_success'] = '[+type+] [+name+] verwijderd.';
+$_lang['delete_error'] = '[+type+] is niet verwijderd.';
+$_lang['delete_error_type'] = '[+type+] niet gevonden.';
 $_lang['file_delete_success'] = 'Pakket succesvol verwijderd.';
 $_lang['file_upload_success'] = '[+filename+] succesvol geupload.';
 $_lang['file_upload_error'] = '[+filename+] is niet geupload! Is de map assets/packages schrijfbaar? ';
@@ -67,6 +71,10 @@ $_lang['file_upload_error_exists'] = '[+lang.package:ucfirst+] [+package+] besta
 $_lang['file_upload_error_package'] = '[+filename+] is geen geldig Modx Evolution pakket.';
 $_lang['file_upload_error_type'] = '[+filename+] heeft de verkeerde bestandstype.';
 $_lang['file_upload_nofile'] = 'Geen bestand geupload.';
+$_lang['file_extract_success'] = '[+filename+] succesvol uitgepakt.';
 $_lang['file_extract_error'] = '[+filename+] niet kan worden uitgepakt. Is de map [+destination+] schrijfbaar?';
 $_lang['file_extract_error_open'] = '[+filename+] kan niet worden geopend als zip bestand.';
+$_lang['runtime_error_packages_folder'] = 'The map assets/packages kan niet worden gemaakt. Maak deze zelf aan en zorg dat deze schrijfbaar is.';
+$_lang['runtime_error_privileges_install'] = 'Je hebt niet genoeg rechten om pakketten te installeren!';
+$_lang['runtime_error_privileges_delete'] = 'Je hebt niet genoeg rechten om [+type+] te verwijderen!';
 ?>
