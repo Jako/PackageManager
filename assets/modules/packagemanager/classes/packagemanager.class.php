@@ -583,7 +583,13 @@ class PackageManager {
 				$tmpname = uniqid('package_');
 				$zipname = $this->options['cachePath'] . $tmpname . '.zip';
 				$extractFolder = $this->options['cachePath'] . $tmpname;
-				if ($_FILES['upload']['type'] == 'application/zip' || $_FILES['upload']['type'] == 'application/x-zip-compressed' || $_FILES['upload']['type'] == 'multipart/x-zip' || $_FILES['upload']['type'] == 'application/x-compressed' || $_FILES['upload']['type'] == 'application/octet-stream') {
+				if ($_FILES['upload']['type'] == 'application/zip' ||
+						$_FILES['upload']['type'] == 'application/x-zip-compressed' ||
+						$_FILES['upload']['type'] == 'application/x-zip' ||
+						$_FILES['upload']['type'] == 'application/x-compressed' ||
+						$_FILES['upload']['type'] == 'application/octet-stream' ||
+						$_FILES['upload']['type'] == 'multipart/x-zip'
+				) {
 					move_uploaded_file($_FILES['upload']['tmp_name'], $zipname);
 					$result = $this->uploadLocalCheck($zipname, $extractFolder);
 				} elseif (isset($_POST['remote']) && $_POST['remote'] != '') {
