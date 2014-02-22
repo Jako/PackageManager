@@ -1,4 +1,5 @@
 var packageManagerDefaultTab = $.cookie('packageManagerTab') || '.tab:first-child';
+packageManagerDefaultTab = $(packageManagerDefaultTab).length ? packageManagerDefaultTab : '.tab:first-child';
 
 $('#packageManagerPanes').easytabs({
 	tabs: '> .tab-row > .tab',
