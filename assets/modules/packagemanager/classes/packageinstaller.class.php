@@ -105,10 +105,14 @@ class PackageInstaller {
 					'folder' => $this->options['assetsPath'] . $type . '/' . $folder . '.old'
 						), '[+lang.install_files_success_backup+]', TRUE);
 			}
-			$this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
-			$result[] = $this->resultMessage(array(
-				'folder' => $this->options['assetsPath'] . $type . '/' . $folder
-					), '[+lang.install_files_success+]', TRUE);
+			$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
+			if (count($copyresult)) {
+				$result[] = array_merge($result, $copyresult);
+			} else {
+				$result[] = $this->resultMessage(array(
+					'folder' => $this->options['assetsPath'] . $type . '/' . $folder
+						), '[+lang.install_files_success+]', TRUE);
+			}
 		}
 		// copy all other folders
 		foreach (glob($path . 'assets/*', GLOB_ONLYDIR) as $foldername) {
@@ -116,10 +120,14 @@ class PackageInstaller {
 			preg_match('#([^\/]*)$#', $foldername, $parts);
 			$type = $parts[1];
 			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets'))) {
-				$this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
-				$result[] = $this->resultMessage(array(
-					'folder' => $this->options['assetsPath'] . $type
-						), '[+lang.install_files_success+]', TRUE);
+				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
+				if (count($copyresult)) {
+					$result[] = array_merge($result, $copyresult);
+				} else {
+					$result[] = $this->resultMessage(array(
+						'folder' => $this->options['assetsPath'] . $type
+							), '[+lang.install_files_success+]', TRUE);
+				}
 			}
 		}
 		return $result;
@@ -604,19 +612,36 @@ class PackageInstaller {
 	}
 
 	private function copyFolder($source, $destination) {
+		$result = array();
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
 		if (!file_exists($destination)) {
-			mkdir($destination, intval($this->modx->config['new_folder_permissions'], 8));
+			$success = mkdir($destination, intval($this->modx->config['new_folder_permissions'], 8));
+			if (!$success) {
+				$result[] = $this->resultMessage(array(
+					'folder' => $destination
+						), '[+lang.create_folder_error+]', FALSE);
+			}
 		}
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
 				if (!file_exists($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) {
-					mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), intval($this->modx->config['new_folder_permissions'], 8));
+					$success = mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), intval($this->modx->config['new_folder_permissions'], 8));
+					if (!$success) {
+						$result[] = $this->resultMessage(array(
+							'folder' => $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
+								), '[+lang.create_folder_error+]', FALSE);
+					}
 				}
 			} else {
-				copy($item, $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				$success = copy($item, $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				if (!$success) {
+					$result[] = $this->resultMessage(array(
+						'folder' => $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
+							), '[+lang.copy_folder_error+]', FALSE);
+				}
 			}
 		}
+		return $result;
 	}
 
 }
