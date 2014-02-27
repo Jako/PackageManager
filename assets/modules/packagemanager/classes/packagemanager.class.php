@@ -829,7 +829,7 @@ class PackageManager {
 	 * @param string Valid filename
 	 */
 	private function validFilename($name) {
-		return (preg_replace('/[^0-9a-z\/\._-]+/', '', $name));
+		return (preg_replace('/[^0-9a-z\/\._-]+/', '', strtolower($name)));
 	}
 
 }
