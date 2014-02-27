@@ -98,20 +98,22 @@ class PackageInstaller {
 			preg_match('#([^\/]*)\/([^\/]*)$#', $foldername, $parts);
 			$type = $parts[1];
 			$folder = $parts[2];
-			// move files to backup if the package name starts with the folder name
-			if ($backup && file_exists($this->options['assetsPath'] . $type . '/' . $folder) && strpos($package, $folder) === 0) {
-				rename($this->options['assetsPath'] . $type . '/' . $folder, $this->options['assetsPath'] . $type . '/' . $folder . '.old');
-				$result[] = $this->resultMessage(array(
-					'folder' => $this->options['assetsPath'] . $type . '/' . $folder . '.old'
-						), '[+lang.install_files_success_backup+]', TRUE);
-			}
-			$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
-			if (count($copyresult)) {
-				$result[] = array_merge($result, $copyresult);
-			} else {
-				$result[] = $this->resultMessage(array(
-					'folder' => $this->options['assetsPath'] . $type . '/' . $folder
-						), '[+lang.install_files_success+]', TRUE);
+			if (in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets', 'tvs'))) {
+				// move files to backup if the package name starts with the folder name
+				if ($backup && file_exists($this->options['assetsPath'] . $type . '/' . $folder) && strpos($package, $folder) === 0) {
+					rename($this->options['assetsPath'] . $type . '/' . $folder, $this->options['assetsPath'] . $type . '/' . $folder . '.old');
+					$result[] = $this->resultMessage(array(
+						'folder' => $this->options['assetsPath'] . $type . '/' . $folder . '.old'
+							), '[+lang.install_files_success_backup+]', TRUE);
+				}
+				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
+				if (count($copyresult)) {
+					$result[] = array_merge($result, $copyresult);
+				} else {
+					$result[] = $this->resultMessage(array(
+						'folder' => $this->options['assetsPath'] . $type . '/' . $folder
+							), '[+lang.install_files_success+]', TRUE);
+				}
 			}
 		}
 		// copy all other folders
@@ -119,7 +121,7 @@ class PackageInstaller {
 			$parts = array();
 			preg_match('#([^\/]*)$#', $foldername, $parts);
 			$type = $parts[1];
-			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets'))) {
+			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets', 'tvs'))) {
 				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
 				if (count($copyresult)) {
 					$result[] = array_merge($result, $copyresult);
