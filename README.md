@@ -61,7 +61,7 @@ As an example follows the Package Manager Module .tpl DocBlock:
  * Easy install extra packages
  *
  * @category 	module
- * @version 	1.0.RC2
+ * @version 	1.0
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @author      Jako
  * @internal	@modx_category Manager and Admin

@@ -5,7 +5,7 @@
  * @package packagemanager
  * @subpackage language_file
  *
- * @version 1.0.RC2
+ * @version 1.0-RC3
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */

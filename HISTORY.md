@@ -12,3 +12,7 @@ History
 - 1.0-RC2 (11-02-2014)
 	- Delete installed extras directly
 	- Bugfixes
+
+- 1.0-RC3 (28-02-2014)
+	- Better error messages
+	- Bugfixes

@@ -5,7 +5,7 @@
  * @package packagemanager
  * @subpackage class_file
  *
- * @version 1.0.RC2
+ * @version 1.0-RC3
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -286,10 +286,6 @@ class PackageManager {
 		}
 		$wrapper = $this->chunkie->process();
 
-		$messagesArray = array();
-		foreach ($messages as $message) {
-			$messagesArray[] = $message->message;
-		}
 		$p = new Pagination(array(
 			'per_page' => $limit,
 			'use_page_numbers' => TRUE,
@@ -316,7 +312,7 @@ class PackageManager {
 		$this->chunkie->setPlaceholder('page', ($page > 1) ? $page : '');
 		$this->chunkie->setPlaceholder('search', $search);
 		$this->chunkie->setPlaceholder('wrapper', $wrapper);
-		$this->chunkie->setPlaceholder('messages', implode("<br/>\n", $messagesArray));
+		$this->chunkie->setPlaceholder('messages', $this->installer->displayMessage($messages, '', 'fail'));
 		$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/installedPackages.template.html'));
 		$this->chunkie->prepareTemplate();
 		return $this->chunkie->process();
@@ -344,24 +340,24 @@ class PackageManager {
 						$result = $this->installer->resultMessage(array(
 							'type' => $this->types[$type]->name_singular,
 							'name' => $name
-								), '[+lang.delete_success+]', TRUE);
+								), $this->language['delete_success'], TRUE);
 						$this->modx->invokeEvent($this->types[$type]->event_delete, array(
 							"id" => $id
 						));
 					} else {
 						$result = $this->installer->resultMessage(array(
 							'type' => $this->types[$type]->name_singular,
-								), '[+lang.delete_error+]', FALSE);
+								), $this->language['delete_error'], FALSE);
 					}
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'type' => $this->types[$type]->name
-							), '[+lang.runtime_error_privileges_delete+]', FALSE);
+							), $this->language['runtime_error_privileges_delete'], FALSE);
 				}
 			} else {
 				$result = $this->installer->resultMessage(array(
 					'type' => $this->modx->stripTags($_REQUEST['type'])
-						), '[+lang.delete_error_type+]', FALSE);
+						), $this->language['delete_error_type'], FALSE);
 			}
 		}
 		return $result;
@@ -518,15 +514,9 @@ class PackageManager {
 			$wrapper = $this->language['no_local_packages'];
 		}
 
-		$messagesArray = array();
-		foreach ($messages as $message) {
-			if ($message->message) {
-				$messagesArray[] = $message->message;
-			}
-		}
 		$this->chunkie->setPlaceholder('name', $this->language['packages']);
 		$this->chunkie->setPlaceholder('type', '');
-		$this->chunkie->setPlaceholder('messages', implode("<br/>\n", $messagesArray));
+		$this->chunkie->setPlaceholder('messages', $this->installer->displayMessage($messages, '', 'fail'));
 		$this->chunkie->setPlaceholder('lang', $this->language);
 		$this->chunkie->setPlaceholder('options', $this->options);
 		$this->chunkie->setPlaceholder('wrapper', $wrapper);
@@ -551,7 +541,7 @@ class PackageManager {
 			}
 			$this->removeFolder($this->options['packagesPath'] . $package);
 			$result = $this->installer->resultMessage(array(
-					), '[+lang.file_delete_success+]', TRUE);
+					), $this->language['file_delete_success'], TRUE);
 		}
 		return $result;
 	}
@@ -606,22 +596,22 @@ class PackageManager {
 					} else {
 						$result = $this->installer->resultMessage(array(
 							'filename' => $_FILES['upload']['name']
-								), '[+lang.file_upload_nofile+]', FALSE);
+								), $this->language['file_upload_nofile'], FALSE);
 					}
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), '[+lang.file_upload_error_type+]', FALSE);
+							), $this->language['file_upload_error_type'], FALSE);
 				}
 			} else {
 				if ($_FILES['upload']['name']) {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), '[+lang.file_upload_error+]', FALSE);
+							), $this->language['file_upload_error'], FALSE);
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), '[+lang.file_upload_nofile+]', FALSE);
+							), $this->language['file_upload_nofile'], FALSE);
 				}
 			}
 		}
@@ -654,19 +644,19 @@ class PackageManager {
 				if (file_exists($this->options['packagesPath'] . $newname)) {
 					$result = $this->installer->resultMessage(array(
 						'package' => $info[name] . ' ' . $info['version']
-							), '[+lang.file_upload_error_exists+]', FALSE);
+							), $this->language['file_upload_error_exists'], FALSE);
 				} else {
 					if (!rename($zipname, $this->options['packagesPath'] . $newname)) {
 						unlink($zipname);
 						$this->removeFolder($extractFolder);
 						$result = $this->installer->resultMessage(array(
 							'filename' => $packagename
-								), '[+lang.file_upload_error+]', FALSE);
+								), $this->language['file_upload_error'], FALSE);
 					} else {
 						$this->removeFolder($extractFolder);
 						$result = $this->installer->resultMessage(array(
 							'filename' => $packagename
-								), '[+lang.file_upload_success+]', TRUE);
+								), $this->language['file_upload_success'], TRUE);
 					}
 				}
 			} else {
@@ -674,7 +664,7 @@ class PackageManager {
 				$this->removeFolder($extractFolder);
 				$result = $this->installer->resultMessage(array(
 					'filename' => ($_FILES['upload']['name'] != '') ? $_FILES['upload']['name'] : $this->language['remote_files_singular']
-						), '[+lang.file_upload_error_package+]', FALSE);
+						), $this->language['file_upload_error_package'], FALSE);
 			}
 		}
 		return $result;
@@ -728,16 +718,16 @@ class PackageManager {
 				$result = $this->installer->resultMessage(array(
 					'filename' => $this->language['temporary_files_singular'],
 					'destination' => str_replace(MODX_BASE_PATH, '', $destination)
-						), '[+lang.file_extract_error+]', FALSE);
+						), $this->language['file_extract_error'], FALSE);
 			} else {
 				$result = $this->installer->resultMessage(array(
 					'filename' => $this->language['temporary_files_singular']
-						), '[+lang.file_extract_success+]', TRUE);
+						), $this->language['file_extract_success'], TRUE);
 			}
 		} else {
 			$result = $this->installer->resultMessage(array(
 				'filename' => $this->language['temporary_files_singular']
-					), '[+lang.file_extract_error_open+]', FALSE);
+					), $this->language['file_extract_error_open'], FALSE);
 		}
 		$zip->close();
 		return $result;
