@@ -445,7 +445,7 @@ class PackageInstaller {
 		if ($this->modx->db->getRecordCount($rs) && !$backup) {
 			$row = $this->modx->db->getRow($rs);
 			if ($fields['properties']) {
-				$fields['properties'] = $this->propertiesUpdate($fields['properties'], $row['properties']);
+				$fields['properties'] = $this->modx->db->escape($this->propertiesUpdate($fields['properties'], $row['properties']));
 			}
 			if (!$this->modx->db->update($fields, $this->modx->getFullTableName('site_' . $type), 'name = "' . $fields['name'] . '"')) {
 				$result = $this->resultMessage(array(
