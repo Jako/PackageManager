@@ -71,14 +71,14 @@ class PackageManager {
 		$this->options = $config;
 
 		// load localization
-		include_once INSTM_BASE_PATH . 'lang/english.inc.php';
-
 		$language = $this->modx->config['manager_language'];
+
 		$_lang = array();
+		include INSTM_BASE_PATH . 'lang/english.inc.php';
 		if ($language != 'english') {
 			$lang_file = INSTM_BASE_PATH . 'lang/' . $language . '.inc.php';
 			if (file_exists($lang_file)) {
-				include_once $lang_file;
+				include $lang_file;
 			}
 		}
 		$this->language = $_lang;
