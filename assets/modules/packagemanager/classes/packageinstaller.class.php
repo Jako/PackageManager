@@ -1,11 +1,12 @@
 <?php
+
 /*
  * Package Manager
  *
  * @package packagemanager
  * @subpackage installer_class_file
  *
- * @version 1.0-RC3
+ * @version 1.0-RC4
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -52,9 +53,9 @@ class PackageInstaller {
 	 * @param array $config An array of configuration options.
 	 */
 	function __construct($modx, $config = array(), $language = array()) {
-		$this->modx = &$modx;
-		$this->options = &$config;
-		$this->language = &$language;
+		$this->modx = & $modx;
+		$this->options = & $config;
+		$this->language = & $language;
 		$this->depedencies = array();
 
 		if (!class_exists('newChunkie')) {
@@ -63,7 +64,7 @@ class PackageInstaller {
 		$this->chunkie = new newChunkie($this->modx, array('basepath' => INSTM_PATH));
 	}
 
-	function installPackage($package, $backup = FALSE) {
+	function installPackage($package, $backup = false) {
 		if ($this->modx->hasPermission('new_template') && $this->modx->hasPermission('new_chunk') && $this->modx->hasPermission('new_module') && $this->modx->hasPermission('new_snippet') && $this->modx->hasPermission('new_plugin')) {
 			$result = array();
 			$foldername = $this->options['packagesPath'] . $package . '/';
@@ -83,8 +84,7 @@ class PackageInstaller {
 			$sync->setReport(false);
 			$sync->emptyCache();
 		} else {
-			$result[] = $this->resultMessage(array(
-					), $this->language['runtime_error_privileges_install'], FALSE);
+			$result[] = $this->resultMessage(array(), $this->language['runtime_error_privileges_install'], false);
 		}
 
 		return $result;
@@ -104,7 +104,7 @@ class PackageInstaller {
 					rename($this->options['assetsPath'] . $type . '/' . $folder, $this->options['assetsPath'] . $type . '/' . $folder . '.old');
 					$result[] = $this->resultMessage(array(
 						'folder' => $this->options['assetsPath'] . $type . '/' . $folder . '.old'
-							), $this->language['install_files_success_backup'], TRUE);
+					), $this->language['install_files_success_backup'], true);
 				}
 				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
 				if (count($copyresult)) {
@@ -112,7 +112,7 @@ class PackageInstaller {
 				} else {
 					$result[] = $this->resultMessage(array(
 						'folder' => $this->options['assetsPath'] . $type . '/' . $folder
-							), $this->language['install_files_success'], TRUE);
+					), $this->language['install_files_success'], true);
 				}
 			}
 		}
@@ -128,7 +128,7 @@ class PackageInstaller {
 				} else {
 					$result[] = $this->resultMessage(array(
 						'folder' => $this->options['assetsPath'] . $type
-							), $this->language['install_files_success'], TRUE);
+					), $this->language['install_files_success'], true);
 				}
 			}
 		}
@@ -146,13 +146,13 @@ class PackageInstaller {
 			$code = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $code, 1);
 			if (count($docblock)) {
 				$fields = array(
-					'name' => $docblock['name'],
+					'templatename' => $docblock['name'],
 					'description' => (!empty($docblock['version']) ? '<strong>' . $docblock['version'] . '</strong> ' : '') . $docblock['description'],
 					'category' => $this->getCategoryId($docblock['modx_category']),
 					'content' => $code,
 					'locked' => (isset($docblock['lock_template']) && $docblock['lock_template']) ? 1 : 0
 				);
-				$result[] = $this->installType('templates', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('templates', 'templatenamename', $fields, $docblock['version'], $backup);
 			}
 		}
 		return $result;
@@ -177,7 +177,7 @@ class PackageInstaller {
 					'category' => $this->getCategoryId($docblock['modx_category']),
 					'locked' => $docblock['lock_tv'],
 				);
-				$result[] = $this->installType('tmplvars', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('tmplvars', 'name', $fields, $docblock['version'], $backup);
 
 				// add template assignments
 				$assignments = isset($docblock['template_assignments']) ? explode(',', $docblock['template_assignments']) : array();
@@ -219,8 +219,8 @@ class PackageInstaller {
 					'category' => $this->getCategoryId($docblock['modx_category']),
 					'snippet' => $code
 				);
-				$overwrite = ($docblock['overwrite'] == 'false' || $backup) ? TRUE : FALSE;
-				$result[] = $this->installType('htmlsnippets', $fields, $docblock['version'], $overwrite);
+				$overwrite = ($docblock['overwrite'] == 'false' || $backup) ? true : false;
+				$result[] = $this->installType('htmlsnippets', 'name', $fields, $docblock['version'], $overwrite);
 			}
 		}
 		return $result;
@@ -248,7 +248,7 @@ class PackageInstaller {
 					'guid' => $docblock['guid'],
 					'enable_sharedparams' => isset($docblock['dependencies'])
 				);
-				$result[] = $this->installType('modules', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('modules', 'name', $fields, $docblock['version'], $backup);
 			}
 		}
 		return $result;
@@ -271,7 +271,7 @@ class PackageInstaller {
 					'snippet' => $code,
 					'properties' => $docblock['properties']
 				);
-				$result[] = $this->installType('snippets', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('snippets', 'name', $fields, $docblock['version'], $backup);
 			}
 		}
 		return $result;
@@ -295,7 +295,7 @@ class PackageInstaller {
 					'properties' => $docblock['properties'],
 					'disabled' => (isset($docblock['disabled']) && $docblock['disabled']) ? 1 : 0
 				);
-				$result[] = $this->installType('plugins', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('plugins', 'name', $fields, $docblock['version'], $backup);
 
 				// disable legacy versions based on legacy_names provided
 				if (isset($docblock['legacy_names'])) {
@@ -304,7 +304,7 @@ class PackageInstaller {
 					$rs = $this->modx->db->update(array('disabled' => 1), $this->modx->getFullTableName('site_plugins'), 'name IN(' . $this->modx->db->escape(implode(',', $legacies)) . ')');
 					$result[] = $this->resultMessage(array(
 						'legacies' => implode(', ', $legacies)
-							), $this->language['install_legacy'], TRUE);
+					), $this->language['install_legacy'], true);
 				}
 
 				// add system events
@@ -416,12 +416,12 @@ class PackageInstaller {
 				$this->modx->db->insert(array('module' => $moduleId, 'resource' => $extraId, 'type' => $dependency['type']), $this->modx->getFullTableName('site_module_depobj'));
 				$result[] = $this->resultMessage(array(
 					'modulename' => $dependency['module']
-						), $this->language['install_depedency_created'], TRUE);
+				), $this->language['install_depedency_created'], true);
 			} else {
 				$this->modx->db->update(array('module' => $moduleId, 'resource' => $extraId, 'type' => $dependency['type']), $this->modx->getFullTableName('site_module_depobj'), 'module=' . $moduleId . ' AND resource=' . $extraId . ' AND type=' . $dependency['type']);
 				$result[] = $this->resultMessage(array(
 					'modulename' => $dependency['module']
-						), $this->language['install_depedency_updated'], TRUE);
+				), $this->language['install_depedency_updated'], true);
 			}
 			if ($dependency['type'] == 30 || $dependency['type'] == 40) {
 				// set extra guid for plugins and snippets
@@ -431,33 +431,33 @@ class PackageInstaller {
 					$result[] = $this->resultMessage(array(
 						'depedencyname' => $dependency['name'],
 						'type' => ($dependency['type'] == 30) ? $this->language['plugins_singular'] : $this->language['snippets_singular']
-							), $this->language['install_update_error'], TRUE);
+					), $this->language['install_update_error'], true);
 				}
 			}
 		}
 		return $result;
 	}
 
-	private function installType($type, $fields, $version, $backup) {
+	private function installType($type, $column, $fields, $version, $backup) {
 		$fields = $this->modx->db->escape($fields);
 		$version = $this->modx->db->escape($version);
-		$rs = $this->modx->db->select('*', $this->modx->getFullTableName('site_' . $type), 'name = "' . $fields['name'] . '"');
+		$rs = $this->modx->db->select('*', $this->modx->getFullTableName('site_' . $type), $column . ' = "' . $fields['name'] . '"');
 		if ($this->modx->db->getRecordCount($rs) && !$backup) {
 			$row = $this->modx->db->getRow($rs);
 			if ($fields['properties']) {
 				$fields['properties'] = $this->modx->db->escape($this->propertiesUpdate($fields['properties'], $row['properties']));
 			}
-			if (!$this->modx->db->update($fields, $this->modx->getFullTableName('site_' . $type), 'name = "' . $fields['name'] . '"')) {
+			if (!$this->modx->db->update($fields, $this->modx->getFullTableName('site_' . $type), $column . ' = "' . $fields['name'] . '"')) {
 				$result = $this->resultMessage(array(
 					'type' => $this->language[$type . '_singular'],
 					'name' => $fields['name'] . ' ' . $version,
 					'error' => $this->modx->db->getLastError()
-						), $this->language['install_update_error'], FALSE);
+				), $this->language['install_update_error'], false);
 			} else {
 				$result = $this->resultMessage(array(
 					'type' => $this->language[$type . '_singular'],
 					'name' => $fields['name'] . ' ' . $version
-						), $this->language['install_update_success'], TRUE);
+				), $this->language['install_update_success'], true);
 			}
 		} else {
 			if ($backup && $this->modx->db->getRecordCount($rs)) {
@@ -470,19 +470,19 @@ class PackageInstaller {
 				}
 				$row['name'] = $row['name'] . ' old';
 				$row = $this->modx->db->escape($row);
-				$this->modx->db->update($row, $this->modx->getFullTableName('site_' . $type), 'name = "' . $fields['name'] . '"');
+				$this->modx->db->update($row, $this->modx->getFullTableName('site_' . $type), $column . ' = "' . $fields['name'] . '"');
 			}
 			if (!$this->modx->db->insert($fields, $this->modx->getFullTableName('site_' . $type))) {
 				$result = $this->resultMessage(array(
 					'type' => $this->language[$type . '_singular'],
 					'name' => $fields['name'] . ' ' . $version,
 					'error' => $this->modx->db->getLastError()
-						), $this->language['install_add_error'], FALSE);
+				), $this->language['install_add_error'], false);
 			} else {
 				$result = $this->resultMessage(array(
 					'type' => $this->language[$type . '_singular'],
 					'name' => $fields['name'] . ' ' . $version
-						), $this->language['install_add_success'], TRUE);
+				), $this->language['install_add_success'], true);
 			}
 		}
 		return $result;
@@ -627,21 +627,21 @@ class PackageInstaller {
 		$result = array();
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
 		if (!file_exists($destination)) {
-			$success = mkdir($destination, intval($this->modx->config['new_folder_permissions'], 8), TRUE);
+			$success = mkdir($destination, intval($this->modx->config['new_folder_permissions'], 8), true);
 			if (!$success) {
 				$result[] = $this->resultMessage(array(
 					'folder' => $destination
-						), $this->language['create_folder_error'], FALSE);
+				), $this->language['create_folder_error'], false);
 			}
 		}
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
 				if (!file_exists($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) {
-					$success = mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), intval($this->modx->config['new_folder_permissions'], 8), TRUE);
+					$success = mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName(), intval($this->modx->config['new_folder_permissions'], 8), true);
 					if (!$success) {
 						$result[] = $this->resultMessage(array(
 							'folder' => $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
-								), $this->language['create_folder_error'], FALSE);
+						), $this->language['create_folder_error'], false);
 					}
 				}
 			} else {
@@ -649,7 +649,7 @@ class PackageInstaller {
 				if (!$success) {
 					$result[] = $this->resultMessage(array(
 						'folder' => $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
-							), $this->language['copy_folder_error'], FALSE);
+					), $this->language['copy_folder_error'], false);
 				}
 			}
 		}

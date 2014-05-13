@@ -16,3 +16,6 @@ History
 - 1.0-RC3 (28-02-2014)
 	- Better error messages
 	- Bugfixes
+
+- 1.0-RC4 (13-05-2014)
+	- Bugfixes

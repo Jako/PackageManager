@@ -1,11 +1,12 @@
 <?php
+
 /*
  * Package Manager
  *
  * @package packagemanager
  * @subpackage class_file
  *
- * @version 1.0-RC3
+ * @version 1.0-RC4
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -66,13 +67,14 @@ class PackageManager {
 	 * @param array $config An array of configuration options.
 	 */
 	function __construct($modx, $config = array()) {
-		$this->modx = &$modx;
+		$this->modx = & $modx;
 		$this->options = $config;
 
 		// load localization
 		include_once INSTM_BASE_PATH . 'lang/english.inc.php';
 
 		$language = $this->modx->config['manager_language'];
+		$_lang = array();
 		if ($language != 'english') {
 			$lang_file = INSTM_BASE_PATH . 'lang/' . $language . '.inc.php';
 			if (file_exists($lang_file)) {
@@ -83,34 +85,34 @@ class PackageManager {
 
 		$this->types = array();
 		$this->types['snippets'] = (object) array(
-					'type' => 'snippets',
-					'type_singular' => 'snippet',
-					'name' => $this->language['snippets'],
-					'name_singular' => $this->language['snippets_singular'],
-					'event_before_delete' => 'OnBeforeSnipFormDelete',
-					'event_delete' => 'OnSnipFormDelete',
-					'edit' => 22,
-					'delete' => 25
+			'type' => 'snippets',
+			'type_singular' => 'snippet',
+			'name' => $this->language['snippets'],
+			'name_singular' => $this->language['snippets_singular'],
+			'event_before_delete' => 'OnBeforeSnipFormDelete',
+			'event_delete' => 'OnSnipFormDelete',
+			'edit' => 22,
+			'delete' => 25
 		);
 		$this->types['plugins'] = (object) array(
-					'type' => 'plugins',
-					'type_singular' => 'plugin',
-					'name' => $this->language['plugins'],
-					'name_singular' => $this->language['plugins_singular'],
-					'event_before_delete' => 'OnBeforePluginFormDelete',
-					'event_delete' => 'OnPluginFormDelete',
-					'edit' => 102,
-					'delete' => 104
+			'type' => 'plugins',
+			'type_singular' => 'plugin',
+			'name' => $this->language['plugins'],
+			'name_singular' => $this->language['plugins_singular'],
+			'event_before_delete' => 'OnBeforePluginFormDelete',
+			'event_delete' => 'OnPluginFormDelete',
+			'edit' => 102,
+			'delete' => 104
 		);
 		$this->types['modules'] = (object) array(
-					'type' => 'modules',
-					'type_singular' => 'module',
-					'name' => $this->language['modules'],
-					'name_singular' => $this->language['modules_singular'],
-					'event_before_delete' => 'OnBeforeModFormDelete',
-					'event_delete' => 'OnModFormDelete',
-					'edit' => 108,
-					'delete' => 110
+			'type' => 'modules',
+			'type_singular' => 'module',
+			'name' => $this->language['modules'],
+			'name_singular' => $this->language['modules_singular'],
+			'event_before_delete' => 'OnBeforeModFormDelete',
+			'event_delete' => 'OnModFormDelete',
+			'edit' => 108,
+			'delete' => 110
 		);
 
 		$this->options['packagesPath'] = MODX_BASE_PATH . 'assets/packages/';
@@ -147,37 +149,33 @@ class PackageManager {
 	 * @return string The module output
 	 */
 	public function run() {
-		$output = '';
 		switch ($this->options['action']) {
 			case 'list_installed':
-			case 'delete': {
-					echo $this->getInstalledPackages();
-					exit();
-				}
-			case 'upload_local': {
-					echo $this->uploadLocalPackages();
-					exit();
-				}
+			case 'delete':
+				echo $this->getInstalledPackages();
+				exit();
+			case 'upload_local':
+				echo $this->uploadLocalPackages();
+				exit();
 			case 'load':
-			default : {
-					$this->chunkie->setPlaceholder('lang', $this->language, 'module');
-					$this->chunkie->setPlaceholder('options', $this->options, 'module');
-					$this->chunkie->setPlaceholder('packagesInstalled', $this->getInstalledPackages(), 'module');
-					$this->chunkie->setPlaceholder('uploadLocal', $this->uploadLocalPackages(), 'module');
-					$this->chunkie->setPlaceholder('packagesLocal', $this->getLocalPackages(), 'module');
+			default :
+				$this->chunkie->setPlaceholder('lang', $this->language, 'module');
+				$this->chunkie->setPlaceholder('options', $this->options, 'module');
+				$this->chunkie->setPlaceholder('packagesInstalled', $this->getInstalledPackages(), 'module');
+				$this->chunkie->setPlaceholder('uploadLocal', $this->uploadLocalPackages(), 'module');
+				$this->chunkie->setPlaceholder('packagesLocal', $this->getLocalPackages(), 'module');
 
-					$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/module.template.html'));
-					$this->chunkie->prepareTemplate('', array(), 'module');
+				$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/module.template.html'));
+				$this->chunkie->prepareTemplate('', array(), 'module');
 
-					$output = $this->chunkie->process('module');
-				}
+				$output = $this->chunkie->process('module');
 		}
 		return $output;
 	}
 
 	/**
 	 * Get installed packages
-	 * 
+	 *
 	 * @return array Array of installed packages
 	 * @return void
 	 */
@@ -206,7 +204,7 @@ class PackageManager {
 			while ($row = $this->modx->db->getRow($rs)) {
 				if (!array_key_exists($row['name'], $this->installed)) {
 					if (!isset($row['version'])) {
-						$version = (strpos($row['description'], '<strong>') === FALSE) ? 'unknown' : $row['description'];
+						$version = (strpos($row['description'], '<strong>') === false) ? 'unknown' : $row['description'];
 						$version = preg_replace('#<strong>(.*)<\/strong>.*#i', '$1', $version);
 					} else {
 						$version = $row['version'];
@@ -237,7 +235,7 @@ class PackageManager {
 			if ($filter['type'] && $this->installed['type'] != $filter['type']->type) {
 				continue;
 			}
-			if ($filter['search'] && (stripos($installed['name'], $filter['search']) === FALSE && stripos($installed['description'], $filter['search']) === FALSE)) {
+			if ($filter['search'] && (stripos($installed['name'], $filter['search']) === false && stripos($installed['description'], $filter['search']) === false)) {
 				continue;
 			}
 			$filtered[] = $installed;
@@ -258,7 +256,7 @@ class PackageManager {
 
 		$filtered = $this->filterInstalled($filter);
 		$countFiltered = count($filtered);
-		$filtered = array_slice($filtered, ($page - 1) * $limit, $limit, TRUE);
+		$filtered = array_slice($filtered, ($page - 1) * $limit, $limit, true);
 
 		$i = 0;
 		foreach ($filtered as $installed) {
@@ -288,7 +286,7 @@ class PackageManager {
 
 		$p = new Pagination(array(
 			'per_page' => $limit,
-			'use_page_numbers' => TRUE,
+			'use_page_numbers' => true,
 			'num_links' => 5,
 			'cur_page' => $page,
 			'total_rows' => $countFiltered,
@@ -324,7 +322,7 @@ class PackageManager {
 	 * @return array Delete result message
 	 */
 	private function deleteInstalled() {
-		$result = NULL;
+		$result = null;
 		if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 			if (isset($_REQUEST['type']) && array_key_exists($_REQUEST['type'], $this->types)) {
 				$type = $_REQUEST['type'];
@@ -340,24 +338,24 @@ class PackageManager {
 						$result = $this->installer->resultMessage(array(
 							'type' => $this->types[$type]->name_singular,
 							'name' => $name
-								), $this->language['delete_success'], TRUE);
+						), $this->language['delete_success'], true);
 						$this->modx->invokeEvent($this->types[$type]->event_delete, array(
 							"id" => $id
 						));
 					} else {
 						$result = $this->installer->resultMessage(array(
 							'type' => $this->types[$type]->name_singular,
-								), $this->language['delete_error'], FALSE);
+						), $this->language['delete_error'], false);
 					}
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'type' => $this->types[$type]->name
-							), $this->language['runtime_error_privileges_delete'], FALSE);
+					), $this->language['runtime_error_privileges_delete'], false);
 				}
 			} else {
 				$result = $this->installer->resultMessage(array(
 					'type' => $this->modx->stripTags($_REQUEST['type'])
-						), $this->language['delete_error_type'], FALSE);
+				), $this->language['delete_error_type'], false);
 			}
 		}
 		return $result;
@@ -408,7 +406,7 @@ class PackageManager {
 	private function unzipLocalPackage($file) {
 		$fileinfo = pathinfo($file);
 		$extractFolder = $fileinfo['dirname'] . '/' . $fileinfo['filename'];
-		$result = NULL;
+		$result = null;
 		if (!file_exists($extractFolder)) {
 			mkdir($extractFolder, intval($this->modx->config['new_folder_permissions'], 8));
 			$result = $this->unzipFile($file, $extractFolder);
@@ -439,7 +437,7 @@ class PackageManager {
 	 */
 	private function folderToZip($folder, &$zipFile, $prefixLength) {
 		$handle = opendir($folder);
-		while (FALSE !== $f = readdir($handle)) {
+		while (false !== $f = readdir($handle)) {
 			if ($f != '.' && $f != '..') {
 				$filePath = "$folder/$f";
 				// Remove prefix from file path before add to zip.
@@ -531,7 +529,7 @@ class PackageManager {
 	 * @return string The delete result message
 	 */
 	private function deleteLocalPackage() {
-		$result = NULL;
+		$result = null;
 		if (isset($_POST['submit_delete'])) {
 			$package = (isset($_POST['package'])) ? $this->modx->stripTags($_POST['package']) : '';
 			$foldername = $this->options['packagesPath'] . $package;
@@ -540,8 +538,7 @@ class PackageManager {
 				unlink($filename);
 			}
 			$this->removeFolder($this->options['packagesPath'] . $package);
-			$result = $this->installer->resultMessage(array(
-					), $this->language['file_delete_success'], TRUE);
+			$result = $this->installer->resultMessage(array(), $this->language['file_delete_success'], true);
 		}
 		return $result;
 	}
@@ -567,18 +564,18 @@ class PackageManager {
 	 * @return string The upload result message
 	 */
 	private function uploadLocalResult() {
-		$result = NULL;
+		$result = null;
 		if (isset($_POST['submit_upload']) && isset($_FILES['upload'])) {
 			if (!$_FILES['upload']['error'] || (isset($_POST['remote']) && $_POST['remote'] != '')) {
 				$tmpname = uniqid('package_');
 				$zipname = $this->options['cachePath'] . $tmpname . '.zip';
 				$extractFolder = $this->options['cachePath'] . $tmpname;
 				if ($_FILES['upload']['type'] == 'application/zip' ||
-						$_FILES['upload']['type'] == 'application/x-zip-compressed' ||
-						$_FILES['upload']['type'] == 'application/x-zip' ||
-						$_FILES['upload']['type'] == 'application/x-compressed' ||
-						$_FILES['upload']['type'] == 'application/octet-stream' ||
-						$_FILES['upload']['type'] == 'multipart/x-zip'
+					$_FILES['upload']['type'] == 'application/x-zip-compressed' ||
+					$_FILES['upload']['type'] == 'application/x-zip' ||
+					$_FILES['upload']['type'] == 'application/x-compressed' ||
+					$_FILES['upload']['type'] == 'application/octet-stream' ||
+					$_FILES['upload']['type'] == 'multipart/x-zip'
 				) {
 					move_uploaded_file($_FILES['upload']['tmp_name'], $zipname);
 					$result = $this->uploadLocalCheck($zipname, $extractFolder);
@@ -596,22 +593,22 @@ class PackageManager {
 					} else {
 						$result = $this->installer->resultMessage(array(
 							'filename' => $_FILES['upload']['name']
-								), $this->language['file_upload_nofile'], FALSE);
+						), $this->language['file_upload_nofile'], false);
 					}
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), $this->language['file_upload_error_type'], FALSE);
+					), $this->language['file_upload_error_type'], false);
 				}
 			} else {
 				if ($_FILES['upload']['name']) {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), $this->language['file_upload_error'], FALSE);
+					), $this->language['file_upload_error'], false);
 				} else {
 					$result = $this->installer->resultMessage(array(
 						'filename' => $_FILES['upload']['name']
-							), $this->language['file_upload_nofile'], FALSE);
+					), $this->language['file_upload_nofile'], false);
 				}
 			}
 		}
@@ -644,19 +641,19 @@ class PackageManager {
 				if (file_exists($this->options['packagesPath'] . $newname)) {
 					$result = $this->installer->resultMessage(array(
 						'package' => $info[name] . ' ' . $info['version']
-							), $this->language['file_upload_error_exists'], FALSE);
+					), $this->language['file_upload_error_exists'], false);
 				} else {
 					if (!rename($zipname, $this->options['packagesPath'] . $newname)) {
 						unlink($zipname);
 						$this->removeFolder($extractFolder);
 						$result = $this->installer->resultMessage(array(
 							'filename' => $packagename
-								), $this->language['file_upload_error'], FALSE);
+						), $this->language['file_upload_error'], false);
 					} else {
 						$this->removeFolder($extractFolder);
 						$result = $this->installer->resultMessage(array(
 							'filename' => $packagename
-								), $this->language['file_upload_success'], TRUE);
+						), $this->language['file_upload_success'], true);
 					}
 				}
 			} else {
@@ -664,7 +661,7 @@ class PackageManager {
 				$this->removeFolder($extractFolder);
 				$result = $this->installer->resultMessage(array(
 					'filename' => ($_FILES['upload']['name'] != '') ? $_FILES['upload']['name'] : $this->language['remote_files_singular']
-						), $this->language['file_upload_error_package'], FALSE);
+				), $this->language['file_upload_error_package'], false);
 			}
 		}
 		return $result;
@@ -676,8 +673,8 @@ class PackageManager {
 	 * @return array The install local package result messages
 	 */
 	private function installLocalPackage() {
-		$result = NULL;
-		$backup = ($_POST['updatemode'] == 'backup') ? TRUE : FALSE;
+		$result = null;
+		$backup = ($_POST['updatemode'] == 'backup') ? true : false;
 		if (isset($_POST['submit_install'])) {
 			$package = (isset($_POST['package'])) ? $this->modx->stripTags($_POST['package']) : '';
 			$result = $this->installer->installPackage($package, $backup);
@@ -713,21 +710,21 @@ class PackageManager {
 	private function unzipFile($zipsource, $destination) {
 		$zip = new ZipArchive;
 		$res = $zip->open($zipsource);
-		if ($res === TRUE) {
+		if ($res === true) {
 			if (!$zip->extractTo($destination)) {
 				$result = $this->installer->resultMessage(array(
 					'filename' => $this->language['temporary_files_singular'],
 					'destination' => str_replace(MODX_BASE_PATH, '', $destination)
-						), $this->language['file_extract_error'], FALSE);
+				), $this->language['file_extract_error'], false);
 			} else {
 				$result = $this->installer->resultMessage(array(
 					'filename' => $this->language['temporary_files_singular']
-						), $this->language['file_extract_success'], TRUE);
+				), $this->language['file_extract_success'], true);
 			}
 		} else {
 			$result = $this->installer->resultMessage(array(
 				'filename' => $this->language['temporary_files_singular']
-					), $this->language['file_extract_error_open'], FALSE);
+			), $this->language['file_extract_error_open'], false);
 		}
 		$zip->close();
 		return $result;
@@ -766,21 +763,21 @@ class PackageManager {
 	 * @param int $maxredirect
 	 * @return mixed
 	 */
-	private function curl_exec_follow($ch, &$maxredirect = NULL) {
-		$mr = ($maxredirect === NULL) ? 5 : intval($maxredirect);
+	private function curl_exec_follow($ch, &$maxredirect = null) {
+		$mr = ($maxredirect === null) ? 5 : intval($maxredirect);
 		if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $mr > 0);
 			curl_setopt($ch, CURLOPT_MAXREDIRS, $mr);
 		} else {
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
 			if ($mr > 0) {
 				$newurl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 
 				$rch = curl_init();
-				curl_setopt($rch, CURLOPT_HEADER, TRUE);
-				curl_setopt($rch, CURLOPT_NOBODY, TRUE);
-				curl_setopt($rch, CURLOPT_FORBID_REUSE, FALSE);
-				curl_setopt($rch, CURLOPT_RETURNTRANSFER, TRUE);
+				curl_setopt($rch, CURLOPT_HEADER, true);
+				curl_setopt($rch, CURLOPT_NOBODY, true);
+				curl_setopt($rch, CURLOPT_FORBID_REUSE, false);
+				curl_setopt($rch, CURLOPT_RETURNTRANSFER, true);
 				do {
 					curl_setopt($rch, CURLOPT_URL, $newurl);
 					$header = curl_exec($rch);
@@ -798,13 +795,13 @@ class PackageManager {
 				} while ($code && --$mr);
 				curl_close($rch);
 				if (!$mr) {
-					if ($maxredirect === NULL) {
+					if ($maxredirect === null) {
 						die('test');
 						trigger_error('Too many redirects. When following redirects, libcurl hit the maximum amount.', E_USER_WARNING);
 					} else {
 						$maxredirect = 0;
 					}
-					return FALSE;
+					return false;
 				}
 				curl_setopt($ch, CURLOPT_URL, $newurl);
 			}

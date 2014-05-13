@@ -5,7 +5,7 @@
  * @package packagemanager
  * @subpackage module
  *
- * @version 1.0-RC3
+ * @version 1.0-RC4
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -18,18 +18,19 @@ define('INSTM_PATH', str_replace(MODX_BASE_PATH, '', str_replace('\\', '/', real
 define('INSTM_BASE_PATH', MODX_BASE_PATH . INSTM_PATH);
 
 // load classfile
-$class_file = INSTM_BASE_PATH . '/classes/packagemanager.class.php';
+$class_file = INSTM_BASE_PATH . 'classes/packagemanager.class.php';
 if (!file_exists($class_file)) {
 	$modx->messageQuit(sprintf('Classfile "%s" not found. Did you upload the module files?', $class_file));
 }
-require_once ($class_file);
+require_once($class_file);
 
-$options = array();
-$options['moduleId'] = (int) $_GET['id'];
-$options['action'] = isset($_GET['action']) ? trim(strip_tags($_GET['action'])) : 'load';
-$options['managerDir'] = MGR_DIR . '/';
-$options['moduleUrl'] = INSTM_PATH;
-$options['managerTheme'] = $modx->config['manager_theme'];
+$options = array(
+	'moduleId' => (int) $_GET['id'],
+	'action' => isset($_GET['action']) ? trim(strip_tags($_GET['action'])) : 'load',
+	'managerDir' => MGR_DIR . '/',
+	'moduleUrl' => INSTM_PATH,
+	'managerTheme' => $modx->config['manager_theme']
+);
 
 $packageManager = new PackageManager($modx, $options);
 $output = $packageManager->run();
