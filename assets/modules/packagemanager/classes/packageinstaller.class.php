@@ -152,7 +152,7 @@ class PackageInstaller {
 					'content' => $code,
 					'locked' => (isset($docblock['lock_template']) && $docblock['lock_template']) ? 1 : 0
 				);
-				$result[] = $this->installType('templates', 'templatenamename', $fields, $docblock['version'], $backup);
+				$result[] = $this->installType('templates', 'templatename', $fields, $docblock['version'], $backup);
 			}
 		}
 		return $result;
