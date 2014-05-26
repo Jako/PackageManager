@@ -120,14 +120,14 @@ class PackageInstaller {
 		foreach (glob($path . 'assets/*', GLOB_ONLYDIR) as $foldername) {
 			$parts = array();
 			preg_match('#([^\/]*)$#', $foldername, $parts);
-			$type = $parts[1];
-			if (!in_array($type, array('backup', 'cache', 'modules', 'plugins', 'snippets', 'tvs'))) {
-				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $type . '/' . $folder);
+            $folder = $parts[1];
+			if (!in_array($folder, array('backup', 'cache', 'modules', 'plugins', 'snippets', 'tvs'))) {
+				$copyresult = $this->copyFolder($foldername, $this->options['assetsPath'] . $folder);
 				if (count($copyresult)) {
 					$result = array_merge($result, $copyresult);
 				} else {
 					$result[] = $this->resultMessage(array(
-						'folder' => $this->options['assetsPath'] . $type
+						'folder' => $this->options['assetsPath'] . $folder
 					), $this->language['install_files_success'], true);
 				}
 			}
