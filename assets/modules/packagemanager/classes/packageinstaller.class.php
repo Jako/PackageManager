@@ -192,10 +192,11 @@ class PackageInstaller {
 					foreach ($assignments as $template) {
 						$where = ($template != '*') ? 'WHERE templatename="' . $this->modx->db->escape($template) . '"' : '';
 						$rsa = $this->modx->db->select('id', $this->modx->getFullTableName('site_templates'), $where);
-						if ($this->modx->db->getRecordCount($rsa)) {
-							$templateId = $this->modx->db->getValue($rsa);
-							$this->modx->db->insert(array('tmplvarid' => $id, 'templateid' => $templateId), $this->modx->getFullTableName('site_tmplvar_templates'));
-						}
+                        if ($this->modx->db->getRecordCount($rsa)) {
+                            while ($row = $this->modx->db->getRow($rsa)) {
+                                $this->modx->db->insert(array('tmplvarid' => $id, 'templateid' => $row['id']), $this->modx->getFullTableName('site_tmplvar_templates'));
+                            }
+                        }
 					}
 				}
 			}
