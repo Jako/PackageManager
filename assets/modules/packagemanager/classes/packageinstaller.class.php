@@ -302,7 +302,7 @@ class PackageInstaller {
 				if (isset($docblock['legacy_names'])) {
 					$legacies = explode(',', $docblock['legacy_names']);
 					array_walk($legacies, create_function('&$val', '$val = trim($val);'));
-					$rs = $this->modx->db->update(array('disabled' => 1), $this->modx->getFullTableName('site_plugins'), 'name IN("' . $this->modx->db->escape(implode('","', $legacies)) . '")');
+					$rs = $this->modx->db->update(array('disabled' => 1), $this->modx->getFullTableName('site_plugins'), 'name IN("' . implode('","', $this->modx->db->escape($legacies)) . '")');
 					$result[] = $this->resultMessage(array(
 						'legacies' => implode(', ', $legacies)
 					), $this->language['install_legacy'], true);
