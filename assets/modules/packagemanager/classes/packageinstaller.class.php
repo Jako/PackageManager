@@ -247,7 +247,8 @@ class PackageInstaller {
 					'modulecode' => $code,
 					'properties' => $docblock['properties'],
 					'guid' => $docblock['guid'],
-					'enable_sharedparams' => isset($docblock['dependencies'])
+					'enable_sharedparams' => isset($docblock['dependencies']),
+					'icon' => (!empty($docblock['icon']) ? $docblock['icon'] : '')
 				);
 				$result[] = $this->installType('modules', 'name', $fields, $docblock['version'], $backup);
 			}
