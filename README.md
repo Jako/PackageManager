@@ -51,6 +51,7 @@ Tag | Description
 @internal @output_widget | Widget (for Template Variables)
 @internal @output_widget_params | Widget Properties (for Template Variables)
 @internal @guid | GUID (for Modules with enabled parameter sharing)
+@internal @icon | Icon for Module
 @internal @enable_sharedparams | Enable parameter sharing (for Modules)
 @internal @properties | Module/Plugin configuration (for Plugins and Modules)
 @internal @disabled | Plugin Disabled (for Plugins)
